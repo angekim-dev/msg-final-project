@@ -16,6 +16,8 @@ export class LoadScene extends Phaser.Scene {
         this.load.image("play_button.png", "./assets/play_button.png");
         this.load.image("mushroom.png", "./assets/mushroom.png");
         this.load.image("ground", "assets/platform.png");
+        this.load.image("star", "assets/star.png");
+        this.load.image("bomb", "assets/bomb.png");
         this.load.spritesheet("cat.png", "./assets/cat.png", {
             frameHeight: 100,
             frameWidth: 200,
@@ -24,9 +26,13 @@ export class LoadScene extends Phaser.Scene {
             frameHeight: 50,
             frameWidth: 100,
         });
-        this.load.spritesheet("dude", "assets/dude.png", {
+        this.load.spritesheet("dude", "./assets/dude.png", {
             frameWidth: 32,
             frameHeight: 48,
+        });
+        this.load.spritesheet("fullscreen", "./assets/fullscreen.png", {
+            frameWidth: 64,
+            frameHeight: 64,
         });
 
         // create loading bar

@@ -193,6 +193,8 @@ var LoadScene = /*#__PURE__*/function (_Phaser$Scene) {
       this.load.image("play_button.png", "./assets/play_button.png");
       this.load.image("mushroom.png", "./assets/mushroom.png");
       this.load.image("ground", "assets/platform.png");
+      this.load.image("star", "assets/star.png");
+      this.load.image("bomb", "assets/bomb.png");
       this.load.spritesheet("cat.png", "./assets/cat.png", {
         frameHeight: 100,
         frameWidth: 200
@@ -201,9 +203,13 @@ var LoadScene = /*#__PURE__*/function (_Phaser$Scene) {
         frameHeight: 50,
         frameWidth: 100
       });
-      this.load.spritesheet("dude", "assets/dude.png", {
+      this.load.spritesheet("dude", "./assets/dude.png", {
         frameWidth: 32,
         frameHeight: 48
+      });
+      this.load.spritesheet("fullscreen", "./assets/fullscreen.png", {
+        frameWidth: 64,
+        frameHeight: 64
       }); // create loading bar
 
       var loadingBar = this.add.graphics({
@@ -393,6 +399,37 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 var platforms;
 var player;
+var cursors;
+var stars;
+var score = 0;
+var scoreText;
+var gameOver = false;
+var button;
+var fullscreenText;
+
+function collectStar(player, star) {
+  star.disableBody(true, true);
+  score += 10;
+  scoreText.setText("Your score: " + score);
+  fullscreenText.setText("press f for fullscreen modus");
+
+  if (stars.countActive(true) === 0) {
+    stars.children.iterate(function (child) {
+      child.enableBody(true, child.x, 0, true, true);
+    });
+    var x = player.x < 400 ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
+  }
+}
+
+function reachedFifty() {
+  player.setTint(0xff00ff);
+  stars.setTint(0x00ff00);
+}
+
+function reachedHundred() {
+  player.setTint(0);
+  stars.setTint(0xffff00);
+}
 
 var PlayScene = /*#__PURE__*/function (_Phaser$Scene) {
   _inherits(PlayScene, _Phaser$Scene);
@@ -422,7 +459,7 @@ var PlayScene = /*#__PURE__*/function (_Phaser$Scene) {
       platforms.create(600, 420, "ground");
       platforms.create(50, 270, "ground");
       platforms.create(750, 250, "ground");
-      player = this.physics.add.sprite(300, 0, "dude");
+      player = this.physics.add.sprite(20, 300, "dude");
       player.setBounce(0.5);
       player.setCollideWorldBounds(true);
       this.anims.create({
@@ -451,7 +488,76 @@ var PlayScene = /*#__PURE__*/function (_Phaser$Scene) {
         frameRate: 10,
         repeat: -1
       });
+      cursors = this.input.keyboard.createCursorKeys();
       this.physics.add.collider(player, platforms);
+      stars = this.physics.add.group({
+        key: "star",
+        repeat: 11,
+        setXY: {
+          x: 12,
+          y: 0,
+          stepX: 70
+        }
+      });
+      stars.children.iterate(function (child) {
+        child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.5));
+      });
+      this.physics.add.collider(stars, platforms);
+      this.physics.add.overlap(player, stars, collectStar, null, this);
+      scoreText = this.add.text(280, 10, "Your score: 0", {
+        fontSize: "32px",
+        fill: "#000"
+      });
+      fullscreenText = this.add.text(420, 570, "press f for fullscreen modus", {
+        fontSize: "22px",
+        fill: "#000"
+      });
+      button = this.add.image(800 - 16, 16, "fullscreen", 0).setOrigin(1, 0).setInteractive();
+      button.on("pointerup", function () {
+        if (this.scale.isFullscreen) {
+          button.setFrame(0);
+          this.scale.stopFullscreen();
+        } else {
+          button.setFrame(1);
+          this.scale.startFullscreen();
+        }
+      }, this);
+      var fKey = this.input.keyboard.addKey("F");
+      fKey.on("down", function () {
+        if (this.scale.isFullscreen) {
+          button.setFrame(0);
+          this.scale.stopFullscreen();
+        } else {
+          button.setFrame(1);
+          this.scale.startFullscreen();
+        }
+      }, this);
+    }
+  }, {
+    key: "update",
+    value: function update() {
+      if (cursors.left.isDown) {
+        player.setVelocityX(-160);
+        player.anims.play("left", true);
+      } else if (cursors.right.isDown) {
+        player.setVelocityX(160);
+        player.anims.play("right", true);
+      } else {
+        player.setVelocityX(0);
+        player.anims.play("turn");
+      }
+
+      if (cursors.up.isDown && player.body.touching.down) {
+        player.setVelocityY(-330);
+      }
+
+      if (score == 50) {
+        reachedFifty();
+      }
+
+      if (score == 100) {
+        reachedHundred();
+      }
     }
   }]);
 
@@ -491,6 +597,8 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
+var changePlayer;
+
 var OptionsScene = /*#__PURE__*/function (_Phaser$Scene) {
   _inherits(OptionsScene, _Phaser$Scene);
 
@@ -512,7 +620,13 @@ var OptionsScene = /*#__PURE__*/function (_Phaser$Scene) {
     value: function preload() {}
   }, {
     key: "create",
-    value: function create() {}
+    value: function create() {
+      this.add.image(0, 0, "mainbg").setOrigin(0).setDepth(0);
+      changePlayer = this.add.text(50, 100, "Choose your player:", {
+        fontSize: "32px",
+        fill: "#000"
+      });
+    }
   }]);
 
   return OptionsScene;
@@ -533,8 +647,12 @@ var _OptionsScene = require("./scenes/OptionsScene");
 console.log("connected!");
 var config = {
   type: Phaser.AUTO,
-  width: 800,
-  height: 600,
+  scale: {
+    mode: Phaser.Scale.FIT,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+    width: 800,
+    height: 600
+  },
   physics: {
     default: "arcade",
     arcade: {
@@ -549,7 +667,6 @@ var config = {
     pixelArt: true
   }
 };
-var platforms;
 var game = new Phaser.Game(config);
 },{"./scenes/LoadScene":"src/scenes/LoadScene.js","./scenes/MenuScene":"src/scenes/MenuScene.js","./scenes/PlayScene":"src/scenes/PlayScene.js","./scenes/OptionsScene":"src/scenes/OptionsScene.js"}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
