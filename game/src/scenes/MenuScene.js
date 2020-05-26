@@ -71,6 +71,7 @@ export class MenuScene extends Phaser.Scene {
         });
         playButton.on("pointerup", () => {
             console.log("up");
+            this.scene.start(CST.SCENES.PLAY);
         });
 
         optionsButton.setInteractive();
@@ -84,6 +85,9 @@ export class MenuScene extends Phaser.Scene {
             purpleHover.setVisible(false);
             purpleHover.x = optionsButton.x;
             purpleHover.y = optionsButton.y;
+        });
+        optionsButton.on("pointerup", () => {
+            this.scene.start(CST.SCENES.OPTIONS);
         });
     }
 }

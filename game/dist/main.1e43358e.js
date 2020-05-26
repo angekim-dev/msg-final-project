@@ -127,7 +127,9 @@ exports.CST = void 0;
 var CST = {
   SCENES: {
     LOAD: "LOAD",
-    MENU: "MENU"
+    MENU: "MENU",
+    PLAY: "PLAY",
+    OPTIONS: "OPTIONS"
   }
 };
 exports.CST = CST;
@@ -190,6 +192,7 @@ var LoadScene = /*#__PURE__*/function (_Phaser$Scene) {
       this.load.image("options_button.png", "./assets/options_button.png");
       this.load.image("play_button.png", "./assets/play_button.png");
       this.load.image("mushroom.png", "./assets/mushroom.png");
+      this.load.image("ground", "assets/platform.png");
       this.load.spritesheet("cat.png", "./assets/cat.png", {
         frameHeight: 100,
         frameWidth: 200
@@ -197,6 +200,10 @@ var LoadScene = /*#__PURE__*/function (_Phaser$Scene) {
       this.load.spritesheet("purple.png", "./assets/purple.png", {
         frameHeight: 50,
         frameWidth: 100
+      });
+      this.load.spritesheet("dude", "assets/dude.png", {
+        frameWidth: 32,
+        frameHeight: 48
       }); // create loading bar
 
       var loadingBar = this.add.graphics({
@@ -289,6 +296,8 @@ var MenuScene = /*#__PURE__*/function (_Phaser$Scene) {
   }, {
     key: "create",
     value: function create() {
+      var _this = this;
+
       //create images (z order)
       this.add.image(this.game.renderer.width / 2, this.game.renderer.height * 0.2, "mushroom.png").setDepth(1).setScale(0.5);
       this.add.image(0, 0, "mainbg").setOrigin(0).setDepth(0);
@@ -326,6 +335,8 @@ var MenuScene = /*#__PURE__*/function (_Phaser$Scene) {
       });
       playButton.on("pointerup", function () {
         console.log("up");
+
+        _this.scene.start(_CST.CST.SCENES.PLAY);
       });
       optionsButton.setInteractive();
       optionsButton.on("pointerover", function () {
@@ -338,6 +349,9 @@ var MenuScene = /*#__PURE__*/function (_Phaser$Scene) {
         purpleHover.x = optionsButton.x;
         purpleHover.y = optionsButton.y;
       });
+      optionsButton.on("pointerup", function () {
+        _this.scene.start(_CST.CST.SCENES.OPTIONS);
+      });
     }
   }]);
 
@@ -345,6 +359,166 @@ var MenuScene = /*#__PURE__*/function (_Phaser$Scene) {
 }(Phaser.Scene);
 
 exports.MenuScene = MenuScene;
+},{"../CST":"src/CST.js"}],"src/scenes/PlayScene.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.PlayScene = void 0;
+
+var _CST = require("../CST");
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function () { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+var platforms;
+var player;
+
+var PlayScene = /*#__PURE__*/function (_Phaser$Scene) {
+  _inherits(PlayScene, _Phaser$Scene);
+
+  var _super = _createSuper(PlayScene);
+
+  function PlayScene() {
+    _classCallCheck(this, PlayScene);
+
+    return _super.call(this, {
+      key: _CST.CST.SCENES.PLAY
+    });
+  }
+
+  _createClass(PlayScene, [{
+    key: "init",
+    value: function init() {}
+  }, {
+    key: "preload",
+    value: function preload() {}
+  }, {
+    key: "create",
+    value: function create() {
+      this.add.image(0, 0, "mainbg").setOrigin(0).setDepth(0);
+      platforms = this.physics.add.staticGroup();
+      platforms.create(400, 580, "ground").setScale(2).refreshBody();
+      platforms.create(600, 420, "ground");
+      platforms.create(50, 270, "ground");
+      platforms.create(750, 250, "ground");
+      player = this.physics.add.sprite(300, 0, "dude");
+      player.setBounce(0.5);
+      player.setCollideWorldBounds(true);
+      this.anims.create({
+        key: "left",
+        frames: this.anims.generateFrameNumbers("dude", {
+          start: 0,
+          end: 3
+        }),
+        frameRate: 10,
+        repeat: -1
+      });
+      this.anims.create({
+        key: "turn",
+        frames: [{
+          key: "dude",
+          frame: 4
+        }],
+        frameRate: 20
+      });
+      this.anims.create({
+        key: "right",
+        frames: this.anims.generateFrameNumbers("dude", {
+          start: 5,
+          end: 8
+        }),
+        frameRate: 10,
+        repeat: -1
+      });
+      this.physics.add.collider(player, platforms);
+    }
+  }]);
+
+  return PlayScene;
+}(Phaser.Scene);
+
+exports.PlayScene = PlayScene;
+},{"../CST":"src/CST.js"}],"src/scenes/OptionsScene.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.OptionsScene = void 0;
+
+var _CST = require("../CST");
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function () { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+var OptionsScene = /*#__PURE__*/function (_Phaser$Scene) {
+  _inherits(OptionsScene, _Phaser$Scene);
+
+  var _super = _createSuper(OptionsScene);
+
+  function OptionsScene() {
+    _classCallCheck(this, OptionsScene);
+
+    return _super.call(this, {
+      key: _CST.CST.SCENES.OPTIONS
+    });
+  }
+
+  _createClass(OptionsScene, [{
+    key: "init",
+    value: function init() {}
+  }, {
+    key: "preload",
+    value: function preload() {}
+  }, {
+    key: "create",
+    value: function create() {}
+  }]);
+
+  return OptionsScene;
+}(Phaser.Scene);
+
+exports.OptionsScene = OptionsScene;
 },{"../CST":"src/CST.js"}],"src/main.js":[function(require,module,exports) {
 "use strict";
 
@@ -352,16 +526,32 @@ var _LoadScene = require("./scenes/LoadScene");
 
 var _MenuScene = require("./scenes/MenuScene");
 
+var _PlayScene = require("./scenes/PlayScene");
+
+var _OptionsScene = require("./scenes/OptionsScene");
+
 console.log("connected!");
-var game = new Phaser.Game({
+var config = {
+  type: Phaser.AUTO,
   width: 800,
   height: 600,
-  scene: [_LoadScene.LoadScene, _MenuScene.MenuScene],
+  physics: {
+    default: "arcade",
+    arcade: {
+      gravity: {
+        y: 300
+      },
+      debug: false
+    }
+  },
+  scene: [_LoadScene.LoadScene, _MenuScene.MenuScene, _PlayScene.PlayScene, _OptionsScene.OptionsScene],
   render: {
     pixelArt: true
   }
-});
-},{"./scenes/LoadScene":"src/scenes/LoadScene.js","./scenes/MenuScene":"src/scenes/MenuScene.js"}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+};
+var platforms;
+var game = new Phaser.Game(config);
+},{"./scenes/LoadScene":"src/scenes/LoadScene.js","./scenes/MenuScene":"src/scenes/MenuScene.js","./scenes/PlayScene":"src/scenes/PlayScene.js","./scenes/OptionsScene":"src/scenes/OptionsScene.js"}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -389,7 +579,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62367" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59983" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

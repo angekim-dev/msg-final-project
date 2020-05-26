@@ -15,6 +15,7 @@ export class LoadScene extends Phaser.Scene {
         this.load.image("options_button.png", "./assets/options_button.png");
         this.load.image("play_button.png", "./assets/play_button.png");
         this.load.image("mushroom.png", "./assets/mushroom.png");
+        this.load.image("ground", "assets/platform.png");
         this.load.spritesheet("cat.png", "./assets/cat.png", {
             frameHeight: 100,
             frameWidth: 200,
@@ -22,6 +23,10 @@ export class LoadScene extends Phaser.Scene {
         this.load.spritesheet("purple.png", "./assets/purple.png", {
             frameHeight: 50,
             frameWidth: 100,
+        });
+        this.load.spritesheet("dude", "assets/dude.png", {
+            frameWidth: 32,
+            frameHeight: 48,
         });
 
         // create loading bar
