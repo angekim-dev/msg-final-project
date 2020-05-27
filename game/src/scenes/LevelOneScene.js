@@ -34,8 +34,8 @@ function reachedFifty() {
 }
 
 function reachedHundred() {
-    player.setTint(0);
-    stars.setTint(0xffff00);
+    player.setTint(0xffffff);
+    stars.setTint(0xffffff);
 }
 
 export class LevelOneScene extends Phaser.Scene {
@@ -49,7 +49,7 @@ export class LevelOneScene extends Phaser.Scene {
     create() {
         this.add.image(0, 0, "mainbg").setOrigin(0).setDepth(0);
         platforms = this.physics.add.staticGroup();
-        platforms.create(400, 580, "ground").setScale(2).refreshBody();
+        platforms.create(200, 580, "ground").setScale(1).refreshBody();
 
         platforms.create(600, 420, "ground");
         platforms.create(50, 270, "ground");

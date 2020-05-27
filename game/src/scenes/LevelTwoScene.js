@@ -5,7 +5,7 @@ let moderngirl;
 let cursors;
 let stars;
 
-let score = 0;
+let score = 120;
 let scoreText;
 let button;
 let fullscreenText;
@@ -18,7 +18,9 @@ function collectStar(moderngirl, star) {
     fullscreenText.setText("press f for fullscreen modus");
 
     if (stars.countActive(true) === 0) {
-        playButton.visible = true;
+        stars.children.iterate(function (child) {
+            child.enableBody(true, child.x, 0, true, true);
+        });
     }
 
     let x =

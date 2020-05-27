@@ -5,6 +5,7 @@ import { MenuScene } from "./scenes/MenuScene";
 import { LevelOneScene } from "./scenes/LevelOneScene";
 import { OptionsScene } from "./scenes/OptionsScene";
 import { LevelTwoScene } from "./scenes/LevelTwoScene";
+import { LevelOneSceneAlternative } from "./scenes/LevelOneSceneAlternative";
 
 let config = {
     type: Phaser.AUTO,
@@ -21,7 +22,14 @@ let config = {
             debug: false,
         },
     },
-    scene: [LoadScene, MenuScene, LevelOneScene, OptionsScene, LevelTwoScene],
+    scene: [
+        LoadScene,
+        MenuScene,
+        LevelOneScene,
+        OptionsScene,
+        LevelTwoScene,
+        LevelOneSceneAlternative,
+    ],
     render: {
         pixelArt: true,
     },

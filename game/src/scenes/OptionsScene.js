@@ -21,7 +21,13 @@ export class OptionsScene extends Phaser.Scene {
             fill: "#000",
         });
 
-        moderngirl = this.add.sprite(500, 100, "moderngirl", 0);
+        moderngirl = this.add
+            .sprite(500, 100, "moderngirl", 0)
+            .setInteractive();
+
+        moderngirl.on("pointerup", () => {
+            this.scene.start(CST.SCENES.LEVELONEA);
+        });
 
         this.anims.create({
             key: "walk",

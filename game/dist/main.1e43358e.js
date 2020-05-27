@@ -130,7 +130,8 @@ var CST = {
     MENU: "MENU",
     LEVELONE: "LEVELONE",
     OPTIONS: "OPTIONS",
-    LEVELTWO: "LEVELTWO"
+    LEVELTWO: "LEVELTWO",
+    LEVELONEA: "LEVELONEA"
   }
 };
 exports.CST = CST;
@@ -193,10 +194,9 @@ var LoadScene = /*#__PURE__*/function (_Phaser$Scene) {
       this.load.image("options_button.png", "./assets/options_button.png");
       this.load.image("play_button.png", "./assets/play_button.png");
       this.load.image("mushroom.png", "./assets/mushroom.png");
-      this.load.image("ground", "assets/platform.png");
+      this.load.image("ground", "assets/platform.jpg");
       this.load.image("grass", "assets/grass.jpeg");
-      this.load.image("star", "assets/star.png");
-      this.load.image("bomb", "assets/bomb.png");
+      this.load.image("star", "assets/collect.png");
       this.load.spritesheet("cat.png", "./assets/cat.png", {
         frameHeight: 100,
         frameWidth: 200
@@ -224,7 +224,9 @@ var LoadScene = /*#__PURE__*/function (_Phaser$Scene) {
       this.load.spritesheet("question", "./assets/question.jpeg", {
         frameWidth: 64,
         frameHeight: 64
-      }); // create loading bar
+      });
+      this.load.image("tile", "./assets/tile.png");
+      this.load.scenePlugin("AnimatedTiles", "AnimatedTiles.js", "animatedTiles", "animatedTiles"); // create loading bar
 
       var loadingBar = this.add.graphics({
         fillStyle: {
@@ -369,7 +371,7 @@ var MenuScene = /*#__PURE__*/function (_Phaser$Scene) {
       playButton.on("pointerup", function () {
         console.log("up");
 
-        _this.scene.start(_CST.CST.SCENES.LEVELTWO);
+        _this.scene.start(_CST.CST.SCENES.LEVELONE);
       });
       optionsButton.setInteractive();
       optionsButton.on("pointerover", function () {
@@ -453,8 +455,8 @@ function reachedFifty() {
 }
 
 function reachedHundred() {
-  player.setTint(0);
-  stars.setTint(0xffff00);
+  player.setTint(0xffffff);
+  stars.setTint(0xffffff);
 }
 
 var LevelOneScene = /*#__PURE__*/function (_Phaser$Scene) {
@@ -483,7 +485,7 @@ var LevelOneScene = /*#__PURE__*/function (_Phaser$Scene) {
 
       this.add.image(0, 0, "mainbg").setOrigin(0).setDepth(0);
       platforms = this.physics.add.staticGroup();
-      platforms.create(400, 580, "ground").setScale(2).refreshBody();
+      platforms.create(200, 580, "ground").setScale(1).refreshBody();
       platforms.create(600, 420, "ground");
       platforms.create(50, 270, "ground");
       platforms.create(750, 250, "ground");
@@ -668,7 +670,10 @@ var OptionsScene = /*#__PURE__*/function (_Phaser$Scene) {
         fontSize: "32px",
         fill: "#000"
       });
-      moderngirl = this.add.sprite(500, 100, "moderngirl", 0);
+      moderngirl = this.add.sprite(500, 100, "moderngirl", 0).setInteractive();
+      moderngirl.on("pointerup", function () {
+        _this.scene.start(_CST.CST.SCENES.LEVELONEA);
+      });
       this.anims.create({
         key: "walk",
         repeat: -1,
@@ -759,7 +764,7 @@ var platforms;
 var moderngirl;
 var cursors;
 var stars;
-var score = 0;
+var score = 120;
 var scoreText;
 var button;
 var fullscreenText;
@@ -771,7 +776,9 @@ function collectStar(moderngirl, star) {
   fullscreenText.setText("press f for fullscreen modus");
 
   if (stars.countActive(true) === 0) {
-    playButton.visible = true;
+    stars.children.iterate(function (child) {
+      child.enableBody(true, child.x, 0, true, true);
+    });
   }
 
   var x = moderngirl.x < 400 ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
@@ -905,6 +912,215 @@ var LevelTwoScene = /*#__PURE__*/function (_Phaser$Scene) {
 }(Phaser.Scene);
 
 exports.LevelTwoScene = LevelTwoScene;
+},{"../CST":"src/CST.js"}],"src/scenes/LevelOneSceneAlternative.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.LevelOneSceneAlternative = void 0;
+
+var _CST = require("../CST");
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function () { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+var platforms;
+var moderngirl;
+var cursors;
+var stars;
+var score = 0;
+var scoreText;
+var button;
+var fullscreenText;
+var playButton;
+
+function reachedFifty() {
+  moderngirl.setTint(0xff00ff);
+  stars.setTint(0x00ff00);
+}
+
+function reachedHundred() {
+  moderngirl.setTint(0xffffff);
+  stars.setTint(0xffffff);
+}
+
+function collectStar(moderngirl, star) {
+  star.disableBody(true, true);
+  score += 10;
+  scoreText.setText("Your score: " + score);
+  fullscreenText.setText("press f for fullscreen modus");
+
+  if (stars.countActive(true) === 0) {
+    playButton.visible = true;
+  }
+
+  var x = moderngirl.x < 400 ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
+}
+
+var LevelOneSceneAlternative = /*#__PURE__*/function (_Phaser$Scene) {
+  _inherits(LevelOneSceneAlternative, _Phaser$Scene);
+
+  var _super = _createSuper(LevelOneSceneAlternative);
+
+  function LevelOneSceneAlternative() {
+    _classCallCheck(this, LevelOneSceneAlternative);
+
+    return _super.call(this, {
+      key: _CST.CST.SCENES.LEVELONEA
+    });
+  }
+
+  _createClass(LevelOneSceneAlternative, [{
+    key: "init",
+    value: function init() {}
+  }, {
+    key: "preload",
+    value: function preload() {}
+  }, {
+    key: "create",
+    value: function create() {
+      var _this = this;
+
+      this.add.image(0, 0, "mainbg").setOrigin(0).setDepth(0);
+      platforms = this.physics.add.staticGroup();
+      platforms.create(200, 580, "ground").setScale(1).refreshBody();
+      platforms.create(600, 420, "ground");
+      platforms.create(50, 270, "ground");
+      platforms.create(750, 250, "ground");
+      moderngirl = this.physics.add.sprite(20, 300, "moderngirl");
+      moderngirl.setBounce(0.5);
+      moderngirl.setCollideWorldBounds(true);
+      this.anims.create({
+        key: "turnleft",
+        frames: this.anims.generateFrameNames("moderngirl", {
+          start: 4,
+          end: 7
+        }),
+        frameRate: 10,
+        repeat: -1
+      });
+      this.anims.create({
+        key: "turnstraight",
+        frames: [{
+          key: "moderngirl",
+          frame: 0
+        }],
+        frameRate: 20
+      });
+      this.anims.create({
+        key: "turnright",
+        frames: this.anims.generateFrameNames("moderngirl", {
+          start: 8,
+          end: 11
+        }),
+        frameRate: 10,
+        repeat: -1
+      });
+      cursors = this.input.keyboard.createCursorKeys();
+      this.physics.add.collider(moderngirl, platforms);
+      stars = this.physics.add.group({
+        key: "star",
+        repeat: 11,
+        setXY: {
+          x: 12,
+          y: 0,
+          stepX: 70
+        }
+      });
+      stars.children.iterate(function (child) {
+        child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.5));
+      });
+      this.physics.add.collider(stars, platforms);
+      this.physics.add.overlap(moderngirl, stars, collectStar, null, this);
+      scoreText = this.add.text(280, 10, "Your score: 0", {
+        fontSize: "32px",
+        fill: "#000"
+      });
+      fullscreenText = this.add.text(420, 570, "press f for fullscreen modus", {
+        fontSize: "22px",
+        fill: "#000"
+      });
+      button = this.add.sprite(750, 50, "fullscreen").setDepth(1).setScale(1).setInteractive();
+      button.on("pointerup", function () {
+        if (_this.scale.isFullscreen) {
+          button.setFrame(0);
+
+          _this.scale.stopFullscreen();
+        } else {
+          button.setFrame(1);
+
+          _this.scale.startFullscreen();
+        }
+      }, this);
+      var fKey = this.input.keyboard.addKey("F");
+      fKey.on("down", function () {
+        if (this.scale.isFullscreen) {
+          button.setFrame(0);
+          this.scale.stopFullscreen();
+        } else {
+          button.setFrame(1);
+          this.scale.startFullscreen();
+        }
+      }, this);
+      playButton = this.add.image(this.game.renderer.width / 2, this.game.renderer.height / 2, "play_button.png").setDepth(1);
+      playButton.visible = false;
+      playButton.setInteractive();
+      playButton.on("pointerup", function () {
+        _this.scene.start(_CST.CST.SCENES.LEVELTWO);
+      });
+    }
+  }, {
+    key: "update",
+    value: function update() {
+      if (cursors.left.isDown) {
+        moderngirl.setVelocityX(-160);
+        moderngirl.anims.play("turnleft", true);
+      } else if (cursors.right.isDown) {
+        moderngirl.setVelocityX(160);
+        moderngirl.anims.play("turnright", true);
+      } else {
+        moderngirl.setVelocityX(0);
+        moderngirl.anims.play("turnstraight");
+      }
+
+      if (cursors.up.isDown && moderngirl.body.touching.down) {
+        moderngirl.setVelocityY(-330);
+      }
+
+      if (score == 50) {
+        reachedFifty();
+      }
+
+      if (score == 100) {
+        reachedHundred();
+      }
+    }
+  }]);
+
+  return LevelOneSceneAlternative;
+}(Phaser.Scene);
+
+exports.LevelOneSceneAlternative = LevelOneSceneAlternative;
 },{"../CST":"src/CST.js"}],"src/main.js":[function(require,module,exports) {
 "use strict";
 
@@ -917,6 +1133,8 @@ var _LevelOneScene = require("./scenes/LevelOneScene");
 var _OptionsScene = require("./scenes/OptionsScene");
 
 var _LevelTwoScene = require("./scenes/LevelTwoScene");
+
+var _LevelOneSceneAlternative = require("./scenes/LevelOneSceneAlternative");
 
 console.log("connected!");
 var config = {
@@ -936,13 +1154,13 @@ var config = {
       debug: false
     }
   },
-  scene: [_LoadScene.LoadScene, _MenuScene.MenuScene, _LevelOneScene.LevelOneScene, _OptionsScene.OptionsScene, _LevelTwoScene.LevelTwoScene],
+  scene: [_LoadScene.LoadScene, _MenuScene.MenuScene, _LevelOneScene.LevelOneScene, _OptionsScene.OptionsScene, _LevelTwoScene.LevelTwoScene, _LevelOneSceneAlternative.LevelOneSceneAlternative],
   render: {
     pixelArt: true
   }
 };
 var game = new Phaser.Game(config);
-},{"./scenes/LoadScene":"src/scenes/LoadScene.js","./scenes/MenuScene":"src/scenes/MenuScene.js","./scenes/LevelOneScene":"src/scenes/LevelOneScene.js","./scenes/OptionsScene":"src/scenes/OptionsScene.js","./scenes/LevelTwoScene":"src/scenes/LevelTwoScene.js"}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./scenes/LoadScene":"src/scenes/LoadScene.js","./scenes/MenuScene":"src/scenes/MenuScene.js","./scenes/LevelOneScene":"src/scenes/LevelOneScene.js","./scenes/OptionsScene":"src/scenes/OptionsScene.js","./scenes/LevelTwoScene":"src/scenes/LevelTwoScene.js","./scenes/LevelOneSceneAlternative":"src/scenes/LevelOneSceneAlternative.js"}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -970,7 +1188,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59983" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59153" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
