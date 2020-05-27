@@ -4,7 +4,7 @@ let changePlayer;
 let moderngirl;
 let back;
 let button;
-let player;
+let jasmine;
 
 export class OptionsScene extends Phaser.Scene {
     constructor() {
@@ -26,7 +26,7 @@ export class OptionsScene extends Phaser.Scene {
             .setInteractive();
 
         moderngirl.on("pointerup", () => {
-            this.scene.start(CST.SCENES.LEVELONEA);
+            this.scene.start(CST.SCENES.LEVELONEMODERN);
         });
 
         this.anims.create({
@@ -40,7 +40,11 @@ export class OptionsScene extends Phaser.Scene {
         });
         moderngirl.play("walk");
 
-        player = this.add.sprite(600, 100, "jasmine");
+        jasmine = this.add.sprite(600, 100, "jasmine").setInteractive();
+
+        jasmine.on("pointerup", () => {
+            this.scene.start(CST.SCENES.LEVELONE);
+        });
 
         this.anims.create({
             key: "playerWalk",
@@ -51,7 +55,7 @@ export class OptionsScene extends Phaser.Scene {
                 end: 3,
             }),
         });
-        player.play("playerWalk");
+        jasmine.play("playerWalk");
 
         back = this.add
             .sprite(50, 550, "back")

@@ -1,7 +1,7 @@
 import { CST } from "../CST";
 
 let platforms;
-let moderngirl;
+let jasmine;
 let cursors;
 let stars;
 
@@ -10,7 +10,7 @@ let scoreText;
 let button;
 let fullscreenText;
 
-function collectStar(moderngirl, star) {
+function collectStar(jasmine, star) {
     star.disableBody(true, true);
 
     score += 10;
@@ -24,7 +24,7 @@ function collectStar(moderngirl, star) {
     }
 
     let x =
-        moderngirl.x < 400
+        jasmine.x < 400
             ? Phaser.Math.Between(400, 800)
             : Phaser.Math.Between(0, 400);
 }
@@ -49,14 +49,14 @@ export class LevelTwoScene extends Phaser.Scene {
         platforms.create(220, 270, "question");
         platforms.create(355, 200, "question");
 
-        moderngirl = this.physics.add.sprite(20, 300, "moderngirl", 0);
+        jasmine = this.physics.add.sprite(20, 300, "jasmine", 0);
 
-        moderngirl.setBounce(0.5);
-        moderngirl.setCollideWorldBounds(true);
+        jasmine.setBounce(0.5);
+        jasmine.setCollideWorldBounds(true);
 
         this.anims.create({
-            key: "turnleft",
-            frames: this.anims.generateFrameNames("moderngirl", {
+            key: "left",
+            frames: this.anims.generateFrameNames("jasmine", {
                 start: 4,
                 end: 7,
             }),
@@ -65,14 +65,14 @@ export class LevelTwoScene extends Phaser.Scene {
         });
 
         this.anims.create({
-            key: "turnstraight",
-            frames: [{ key: "moderngirl", frame: 0 }],
+            key: "turn",
+            frames: [{ key: "jasmine", frame: 0 }],
             frameRate: 20,
         });
 
         this.anims.create({
-            key: "turnright",
-            frames: this.anims.generateFrameNames("moderngirl", {
+            key: "right",
+            frames: this.anims.generateFrameNames("jasmine", {
                 start: 8,
                 end: 11,
             }),
@@ -82,7 +82,7 @@ export class LevelTwoScene extends Phaser.Scene {
 
         cursors = this.input.keyboard.createCursorKeys();
 
-        this.physics.add.collider(moderngirl, platforms);
+        this.physics.add.collider(jasmine, platforms);
 
         stars = this.physics.add.group({
             key: "star",
@@ -95,7 +95,7 @@ export class LevelTwoScene extends Phaser.Scene {
         });
 
         this.physics.add.collider(stars, platforms);
-        this.physics.add.overlap(moderngirl, stars, collectStar, null, this);
+        this.physics.add.overlap(jasmine, stars, collectStar, null, this);
 
         scoreText = this.add.text(280, 10, "Your score: 0", {
             fontSize: "32px",
@@ -150,21 +150,21 @@ export class LevelTwoScene extends Phaser.Scene {
     }
     update() {
         if (cursors.left.isDown) {
-            moderngirl.setVelocityX(-160);
+            jasmine.setVelocityX(-160);
 
-            moderngirl.anims.play("turnleft", true);
+            jasmine.anims.play("left", true);
         } else if (cursors.right.isDown) {
-            moderngirl.setVelocityX(160);
+            jasmine.setVelocityX(160);
 
-            moderngirl.anims.play("turnright", true);
+            jasmine.anims.play("right", true);
         } else {
-            moderngirl.setVelocityX(0);
+            jasmine.setVelocityX(0);
 
-            moderngirl.anims.play("turnstraight");
+            jasmine.anims.play("turn");
         }
 
-        if (cursors.up.isDown && moderngirl.body.touching.down) {
-            moderngirl.setVelocityY(-330);
+        if (cursors.up.isDown && jasmine.body.touching.down) {
+            jasmine.setVelocityY(-330);
         }
     }
 }

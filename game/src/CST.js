@@ -5,6 +5,7 @@ export const CST = {
         LEVELONE: "LEVELONE",
         OPTIONS: "OPTIONS",
         LEVELTWO: "LEVELTWO",
-        LEVELONEA: "LEVELONEA",
+        LEVELONEMODERN: "LEVELONEMODERN",
+        LEVELTWOMODERN: "LEVELTWOMODERN",
     },
 };

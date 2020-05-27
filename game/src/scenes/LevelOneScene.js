@@ -1,7 +1,7 @@
 import { CST } from "../CST";
 
 let platforms;
-let player;
+let jasmine;
 let cursors;
 let stars;
 
@@ -11,7 +11,7 @@ let button;
 let fullscreenText;
 let playButton;
 
-function collectStar(player, star) {
+function collectStar(jasmine, star) {
     star.disableBody(true, true);
 
     score += 10;
@@ -23,18 +23,18 @@ function collectStar(player, star) {
     }
 
     let x =
-        player.x < 400
+        jasmine.x < 400
             ? Phaser.Math.Between(400, 800)
             : Phaser.Math.Between(0, 400);
 }
 
 function reachedFifty() {
-    player.setTint(0xff00ff);
+    jasmine.setTint(0xff00ff);
     stars.setTint(0x00ff00);
 }
 
 function reachedHundred() {
-    player.setTint(0xffffff);
+    jasmine.setTint(0xffffff);
     stars.setTint(0xffffff);
 }
 
@@ -55,10 +55,10 @@ export class LevelOneScene extends Phaser.Scene {
         platforms.create(50, 270, "ground");
         platforms.create(750, 250, "ground");
 
-        player = this.physics.add.sprite(20, 300, "jasmine");
+        jasmine = this.physics.add.sprite(20, 300, "jasmine");
 
-        player.setBounce(0.5);
-        player.setCollideWorldBounds(true);
+        jasmine.setBounce(0.5);
+        jasmine.setCollideWorldBounds(true);
 
         this.anims.create({
             key: "left",
@@ -88,7 +88,7 @@ export class LevelOneScene extends Phaser.Scene {
 
         cursors = this.input.keyboard.createCursorKeys();
 
-        this.physics.add.collider(player, platforms);
+        this.physics.add.collider(jasmine, platforms);
 
         stars = this.physics.add.group({
             key: "star",
@@ -101,7 +101,7 @@ export class LevelOneScene extends Phaser.Scene {
         });
 
         this.physics.add.collider(stars, platforms);
-        this.physics.add.overlap(player, stars, collectStar, null, this);
+        this.physics.add.overlap(jasmine, stars, collectStar, null, this);
 
         scoreText = this.add.text(280, 10, "Your score: 0", {
             fontSize: "32px",
@@ -169,21 +169,21 @@ export class LevelOneScene extends Phaser.Scene {
     }
     update() {
         if (cursors.left.isDown) {
-            player.setVelocityX(-160);
+            jasmine.setVelocityX(-160);
 
-            player.anims.play("left", true);
+            jasmine.anims.play("left", true);
         } else if (cursors.right.isDown) {
-            player.setVelocityX(160);
+            jasmine.setVelocityX(160);
 
-            player.anims.play("right", true);
+            jasmine.anims.play("right", true);
         } else {
-            player.setVelocityX(0);
+            jasmine.setVelocityX(0);
 
-            player.anims.play("turn");
+            jasmine.anims.play("turn");
         }
 
-        if (cursors.up.isDown && player.body.touching.down) {
-            player.setVelocityY(-330);
+        if (cursors.up.isDown && jasmine.body.touching.down) {
+            jasmine.setVelocityY(-330);
         }
 
         if (score == 50) {
