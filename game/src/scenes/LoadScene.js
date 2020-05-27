@@ -16,6 +16,7 @@ export class LoadScene extends Phaser.Scene {
         this.load.image("play_button.png", "./assets/play_button.png");
         this.load.image("mushroom.png", "./assets/mushroom.png");
         this.load.image("ground", "assets/platform.png");
+        this.load.image("brick", "assets/brick.jpg");
         this.load.image("star", "assets/star.png");
         this.load.image("bomb", "assets/bomb.png");
         this.load.spritesheet("cat.png", "./assets/cat.png", {
@@ -27,6 +28,10 @@ export class LoadScene extends Phaser.Scene {
             frameWidth: 100,
         });
         this.load.spritesheet("dude", "./assets/dude.png", {
+            frameWidth: 32,
+            frameHeight: 48,
+        });
+        this.load.spritesheet("moderngirl", "./assets/moderngirl.png", {
             frameWidth: 32,
             frameHeight: 48,
         });

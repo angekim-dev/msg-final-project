@@ -2,7 +2,8 @@ export const CST = {
     SCENES: {
         LOAD: "LOAD",
         MENU: "MENU",
-        PLAY: "PLAY",
+        LEVELONE: "LEVELONE",
         OPTIONS: "OPTIONS",
+        LEVELTWO: "LEVELTWO",
     },
 };

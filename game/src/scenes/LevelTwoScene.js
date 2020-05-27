@@ -1,17 +1,18 @@
 import { CST } from "../CST";
 
 let platforms;
-let player;
+let moderngirl;
 let cursors;
 let stars;
 
 let score = 0;
 let scoreText;
-let gameOver = false;
 let button;
 let fullscreenText;
 
-function collectStar(player, star) {
+let mushroom;
+
+function collectStar(moderngirl, star) {
     star.disableBody(true, true);
 
     score += 10;
@@ -19,31 +20,19 @@ function collectStar(player, star) {
     fullscreenText.setText("press f for fullscreen modus");
 
     if (stars.countActive(true) === 0) {
-        stars.children.iterate(function (child) {
-            child.enableBody(true, child.x, 0, true, true);
-        });
-
-        let x =
-            player.x < 400
-                ? Phaser.Math.Between(400, 800)
-                : Phaser.Math.Between(0, 400);
+        playButton.visible = true;
     }
+
+    let x =
+        moderngirl.x < 400
+            ? Phaser.Math.Between(400, 800)
+            : Phaser.Math.Between(0, 400);
 }
 
-function reachedFifty() {
-    player.setTint(0xff00ff);
-    stars.setTint(0x00ff00);
-}
-
-function reachedHundred() {
-    player.setTint(0);
-    stars.setTint(0xffff00);
-}
-
-export class PlayScene extends Phaser.Scene {
+export class LevelTwoScene extends Phaser.Scene {
     constructor() {
         super({
-            key: CST.SCENES.PLAY,
+            key: CST.SCENES.LEVELTWO,
         });
     }
     init() {}
@@ -51,20 +40,15 @@ export class PlayScene extends Phaser.Scene {
     create() {
         this.add.image(0, 0, "mainbg").setOrigin(0).setDepth(0);
         platforms = this.physics.add.staticGroup();
-        platforms.create(400, 580, "ground").setScale(2).refreshBody();
+        platforms.create(400, 580, "brick").setScale(0.9).refreshBody();
+        moderngirl = this.physics.add.sprite(20, 300, "moderngirl", 0);
 
-        platforms.create(600, 420, "ground");
-        platforms.create(50, 270, "ground");
-        platforms.create(750, 250, "ground");
-
-        player = this.physics.add.sprite(20, 300, "dude");
-
-        player.setBounce(0.5);
-        player.setCollideWorldBounds(true);
+        moderngirl.setBounce(0.5);
+        moderngirl.setCollideWorldBounds(true);
 
         this.anims.create({
-            key: "left",
-            frames: this.anims.generateFrameNumbers("dude", {
+            key: "turnleft",
+            frames: this.anims.generateFrameNames("moderngirl", {
                 start: 0,
                 end: 3,
             }),
@@ -73,16 +57,16 @@ export class PlayScene extends Phaser.Scene {
         });
 
         this.anims.create({
-            key: "turn",
-            frames: [{ key: "dude", frame: 4 }],
+            key: "turnstraight",
+            frames: [{ key: "moderngirl", frame: 0 }],
             frameRate: 20,
         });
 
         this.anims.create({
-            key: "right",
-            frames: this.anims.generateFrameNumbers("dude", {
-                start: 5,
-                end: 8,
+            key: "turnright",
+            frames: this.anims.generateFrameNames("moderngirl", {
+                start: 4,
+                end: 7,
             }),
             frameRate: 10,
             repeat: -1,
@@ -90,7 +74,7 @@ export class PlayScene extends Phaser.Scene {
 
         cursors = this.input.keyboard.createCursorKeys();
 
-        this.physics.add.collider(player, platforms);
+        this.physics.add.collider(moderngirl, platforms);
 
         stars = this.physics.add.group({
             key: "star",
@@ -103,7 +87,7 @@ export class PlayScene extends Phaser.Scene {
         });
 
         this.physics.add.collider(stars, platforms);
-        this.physics.add.overlap(player, stars, collectStar, null, this);
+        this.physics.add.overlap(moderngirl, stars, collectStar, null, this);
 
         scoreText = this.add.text(280, 10, "Your score: 0", {
             fontSize: "32px",
@@ -158,28 +142,21 @@ export class PlayScene extends Phaser.Scene {
     }
     update() {
         if (cursors.left.isDown) {
-            player.setVelocityX(-160);
+            moderngirl.setVelocityX(-160);
 
-            player.anims.play("left", true);
+            moderngirl.anims.play("turnleft", true);
         } else if (cursors.right.isDown) {
-            player.setVelocityX(160);
+            moderngirl.setVelocityX(160);
 
-            player.anims.play("right", true);
+            moderngirl.anims.play("turnright", true);
         } else {
-            player.setVelocityX(0);
+            moderngirl.setVelocityX(0);
 
-            player.anims.play("turn");
+            moderngirl.anims.play("turnstraight");
         }
 
-        if (cursors.up.isDown && player.body.touching.down) {
-            player.setVelocityY(-330);
-        }
-
-        if (score == 50) {
-            reachedFifty();
-        }
-        if (score == 100) {
-            reachedHundred();
+        if (cursors.up.isDown && moderngirl.body.touching.down) {
+            moderngirl.setVelocityY(-330);
         }
     }
 }

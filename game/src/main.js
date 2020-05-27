@@ -2,8 +2,9 @@ console.log("connected!");
 
 import { LoadScene } from "./scenes/LoadScene";
 import { MenuScene } from "./scenes/MenuScene";
-import { PlayScene } from "./scenes/PlayScene";
+import { LevelOneScene } from "./scenes/LevelOneScene";
 import { OptionsScene } from "./scenes/OptionsScene";
+import { LevelTwoScene } from "./scenes/LevelTwoScene";
 
 let config = {
     type: Phaser.AUTO,
@@ -20,7 +21,7 @@ let config = {
             debug: false,
         },
     },
-    scene: [LoadScene, MenuScene, PlayScene, OptionsScene],
+    scene: [LoadScene, MenuScene, LevelOneScene, OptionsScene, LevelTwoScene],
     render: {
         pixelArt: true,
     },

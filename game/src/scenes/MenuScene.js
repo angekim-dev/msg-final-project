@@ -1,5 +1,7 @@
 import { CST } from "../CST";
 
+let fullscreenMushroom;
+
 export class MenuScene extends Phaser.Scene {
     constructor() {
         super({
@@ -12,15 +14,34 @@ export class MenuScene extends Phaser.Scene {
     preload() {}
     create() {
         //create images (z order)
-        this.add
+        this.add.image(0, 0, "mainbg").setOrigin(0).setDepth(0);
+
+        fullscreenMushroom = this.add
             .image(
                 this.game.renderer.width / 2,
                 this.game.renderer.height * 0.2,
                 "mushroom.png"
             )
             .setDepth(1)
-            .setScale(0.5);
-        this.add.image(0, 0, "mainbg").setOrigin(0).setDepth(0);
+            .setScale(0.5)
+            .setInteractive();
+
+        fullscreenMushroom.on(
+            "pointerup",
+            () => {
+                if (this.scale.isFullscreen) {
+                    fullscreenMushroom.setFrame(0);
+
+                    this.scale.stopFullscreen();
+                } else {
+                    fullscreenMushroom.setFrame(1);
+
+                    this.scale.startFullscreen();
+                }
+            },
+            this
+        );
+
         let playButton = this.add
             .image(
                 this.game.renderer.width / 2,
@@ -71,7 +92,7 @@ export class MenuScene extends Phaser.Scene {
         });
         playButton.on("pointerup", () => {
             console.log("up");
-            this.scene.start(CST.SCENES.PLAY);
+            this.scene.start(CST.SCENES.LEVELONE);
         });
 
         optionsButton.setInteractive();
