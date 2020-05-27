@@ -92,7 +92,7 @@ export class MenuScene extends Phaser.Scene {
         });
         playButton.on("pointerup", () => {
             console.log("up");
-            this.scene.start(CST.SCENES.LEVELONE);
+            this.scene.start(CST.SCENES.LEVELTWO);
         });
 
         optionsButton.setInteractive();

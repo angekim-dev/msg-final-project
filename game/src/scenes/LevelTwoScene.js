@@ -10,8 +10,6 @@ let scoreText;
 let button;
 let fullscreenText;
 
-let mushroom;
-
 function collectStar(moderngirl, star) {
     star.disableBody(true, true);
 
@@ -39,8 +37,16 @@ export class LevelTwoScene extends Phaser.Scene {
     preload() {}
     create() {
         this.add.image(0, 0, "mainbg").setOrigin(0).setDepth(0);
+
         platforms = this.physics.add.staticGroup();
-        platforms.create(400, 580, "brick").setScale(0.9).refreshBody();
+
+        platforms.create(400, 600, "grass").setScale(2).refreshBody();
+        platforms.create(-100, 200, "grass");
+        platforms.create(350, 400, "grass");
+        platforms.create(700, 150, "grass");
+        platforms.create(220, 270, "question");
+        platforms.create(355, 200, "question");
+
         moderngirl = this.physics.add.sprite(20, 300, "moderngirl", 0);
 
         moderngirl.setBounce(0.5);
@@ -49,8 +55,8 @@ export class LevelTwoScene extends Phaser.Scene {
         this.anims.create({
             key: "turnleft",
             frames: this.anims.generateFrameNames("moderngirl", {
-                start: 0,
-                end: 3,
+                start: 4,
+                end: 7,
             }),
             frameRate: 10,
             repeat: -1,
@@ -65,8 +71,8 @@ export class LevelTwoScene extends Phaser.Scene {
         this.anims.create({
             key: "turnright",
             frames: this.anims.generateFrameNames("moderngirl", {
-                start: 4,
-                end: 7,
+                start: 8,
+                end: 11,
             }),
             frameRate: 10,
             repeat: -1,

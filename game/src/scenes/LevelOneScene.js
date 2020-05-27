@@ -55,16 +55,16 @@ export class LevelOneScene extends Phaser.Scene {
         platforms.create(50, 270, "ground");
         platforms.create(750, 250, "ground");
 
-        player = this.physics.add.sprite(20, 300, "dude");
+        player = this.physics.add.sprite(20, 300, "jasmine");
 
         player.setBounce(0.5);
         player.setCollideWorldBounds(true);
 
         this.anims.create({
             key: "left",
-            frames: this.anims.generateFrameNumbers("dude", {
-                start: 0,
-                end: 3,
+            frames: this.anims.generateFrameNames("jasmine", {
+                start: 4,
+                end: 7,
             }),
             frameRate: 10,
             repeat: -1,
@@ -72,15 +72,15 @@ export class LevelOneScene extends Phaser.Scene {
 
         this.anims.create({
             key: "turn",
-            frames: [{ key: "dude", frame: 4 }],
+            frames: [{ key: "jasmine", frame: 0 }],
             frameRate: 20,
         });
 
         this.anims.create({
             key: "right",
-            frames: this.anims.generateFrameNumbers("dude", {
-                start: 5,
-                end: 8,
+            frames: this.anims.generateFrameNames("jasmine", {
+                start: 8,
+                end: 11,
             }),
             frameRate: 10,
             repeat: -1,
@@ -119,13 +119,14 @@ export class LevelOneScene extends Phaser.Scene {
         );
 
         button = this.add
-            .image(800 - 16, 16, "fullscreen", 0)
-            .setOrigin(1, 0)
+            .sprite(750, 50, "fullscreen")
+            .setDepth(1)
+            .setScale(1)
             .setInteractive();
 
         button.on(
             "pointerup",
-            function () {
+            () => {
                 if (this.scale.isFullscreen) {
                     button.setFrame(0);
 

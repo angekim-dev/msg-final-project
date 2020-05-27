@@ -194,7 +194,7 @@ var LoadScene = /*#__PURE__*/function (_Phaser$Scene) {
       this.load.image("play_button.png", "./assets/play_button.png");
       this.load.image("mushroom.png", "./assets/mushroom.png");
       this.load.image("ground", "assets/platform.png");
-      this.load.image("brick", "assets/brick.jpg");
+      this.load.image("grass", "assets/grass.jpeg");
       this.load.image("star", "assets/star.png");
       this.load.image("bomb", "assets/bomb.png");
       this.load.spritesheet("cat.png", "./assets/cat.png", {
@@ -205,7 +205,7 @@ var LoadScene = /*#__PURE__*/function (_Phaser$Scene) {
         frameHeight: 50,
         frameWidth: 100
       });
-      this.load.spritesheet("dude", "./assets/dude.png", {
+      this.load.spritesheet("jasmine", "./assets/jasmine.png", {
         frameWidth: 32,
         frameHeight: 48
       });
@@ -214,6 +214,14 @@ var LoadScene = /*#__PURE__*/function (_Phaser$Scene) {
         frameHeight: 48
       });
       this.load.spritesheet("fullscreen", "./assets/fullscreen.png", {
+        frameWidth: 64,
+        frameHeight: 64
+      });
+      this.load.spritesheet("back", "./assets/back.png", {
+        frameWidth: 64,
+        frameHeight: 64
+      });
+      this.load.spritesheet("question", "./assets/question.jpeg", {
         frameWidth: 64,
         frameHeight: 64
       }); // create loading bar
@@ -361,7 +369,7 @@ var MenuScene = /*#__PURE__*/function (_Phaser$Scene) {
       playButton.on("pointerup", function () {
         console.log("up");
 
-        _this.scene.start(_CST.CST.SCENES.LEVELONE);
+        _this.scene.start(_CST.CST.SCENES.LEVELTWO);
       });
       optionsButton.setInteractive();
       optionsButton.on("pointerover", function () {
@@ -479,14 +487,14 @@ var LevelOneScene = /*#__PURE__*/function (_Phaser$Scene) {
       platforms.create(600, 420, "ground");
       platforms.create(50, 270, "ground");
       platforms.create(750, 250, "ground");
-      player = this.physics.add.sprite(20, 300, "dude");
+      player = this.physics.add.sprite(20, 300, "jasmine");
       player.setBounce(0.5);
       player.setCollideWorldBounds(true);
       this.anims.create({
         key: "left",
-        frames: this.anims.generateFrameNumbers("dude", {
-          start: 0,
-          end: 3
+        frames: this.anims.generateFrameNames("jasmine", {
+          start: 4,
+          end: 7
         }),
         frameRate: 10,
         repeat: -1
@@ -494,16 +502,16 @@ var LevelOneScene = /*#__PURE__*/function (_Phaser$Scene) {
       this.anims.create({
         key: "turn",
         frames: [{
-          key: "dude",
-          frame: 4
+          key: "jasmine",
+          frame: 0
         }],
         frameRate: 20
       });
       this.anims.create({
         key: "right",
-        frames: this.anims.generateFrameNumbers("dude", {
-          start: 5,
-          end: 8
+        frames: this.anims.generateFrameNames("jasmine", {
+          start: 8,
+          end: 11
         }),
         frameRate: 10,
         repeat: -1
@@ -532,14 +540,16 @@ var LevelOneScene = /*#__PURE__*/function (_Phaser$Scene) {
         fontSize: "22px",
         fill: "#000"
       });
-      button = this.add.image(800 - 16, 16, "fullscreen", 0).setOrigin(1, 0).setInteractive();
+      button = this.add.sprite(750, 50, "fullscreen").setDepth(1).setScale(1).setInteractive();
       button.on("pointerup", function () {
-        if (this.scale.isFullscreen) {
+        if (_this.scale.isFullscreen) {
           button.setFrame(0);
-          this.scale.stopFullscreen();
+
+          _this.scale.stopFullscreen();
         } else {
           button.setFrame(1);
-          this.scale.startFullscreen();
+
+          _this.scale.startFullscreen();
         }
       }, this);
       var fKey = this.input.keyboard.addKey("F");
@@ -625,6 +635,9 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 var changePlayer;
 var moderngirl;
+var back;
+var button;
+var player;
 
 var OptionsScene = /*#__PURE__*/function (_Phaser$Scene) {
   _inherits(OptionsScene, _Phaser$Scene);
@@ -648,6 +661,8 @@ var OptionsScene = /*#__PURE__*/function (_Phaser$Scene) {
   }, {
     key: "create",
     value: function create() {
+      var _this = this;
+
       this.add.image(0, 0, "mainbg").setOrigin(0).setDepth(0);
       changePlayer = this.add.text(50, 100, "Choose your player:", {
         fontSize: "32px",
@@ -664,6 +679,43 @@ var OptionsScene = /*#__PURE__*/function (_Phaser$Scene) {
         })
       });
       moderngirl.play("walk");
+      player = this.add.sprite(600, 100, "jasmine");
+      this.anims.create({
+        key: "playerWalk",
+        repeat: -1,
+        frameRate: 10,
+        frames: this.anims.generateFrameNames("jasmine", {
+          start: 1,
+          end: 3
+        })
+      });
+      player.play("playerWalk");
+      back = this.add.sprite(50, 550, "back").setDepth(1).setScale(1).setInteractive();
+      back.on("pointerup", function () {
+        _this.scene.start(_CST.CST.SCENES.MENU);
+      });
+      button = this.add.sprite(750, 50, "fullscreen").setDepth(1).setScale(1).setInteractive();
+      button.on("pointerup", function () {
+        if (_this.scale.isFullscreen) {
+          button.setFrame(0);
+
+          _this.scale.stopFullscreen();
+        } else {
+          button.setFrame(1);
+
+          _this.scale.startFullscreen();
+        }
+      }, this);
+      var fKey = this.input.keyboard.addKey("F");
+      fKey.on("down", function () {
+        if (this.scale.isFullscreen) {
+          button.setFrame(0);
+          this.scale.stopFullscreen();
+        } else {
+          button.setFrame(1);
+          this.scale.startFullscreen();
+        }
+      }, this);
     }
   }]);
 
@@ -711,7 +763,6 @@ var score = 0;
 var scoreText;
 var button;
 var fullscreenText;
-var mushroom;
 
 function collectStar(moderngirl, star) {
   star.disableBody(true, true);
@@ -750,15 +801,20 @@ var LevelTwoScene = /*#__PURE__*/function (_Phaser$Scene) {
     value: function create() {
       this.add.image(0, 0, "mainbg").setOrigin(0).setDepth(0);
       platforms = this.physics.add.staticGroup();
-      platforms.create(400, 580, "brick").setScale(0.9).refreshBody();
+      platforms.create(400, 600, "grass").setScale(2).refreshBody();
+      platforms.create(-100, 200, "grass");
+      platforms.create(350, 400, "grass");
+      platforms.create(700, 150, "grass");
+      platforms.create(220, 270, "question");
+      platforms.create(355, 200, "question");
       moderngirl = this.physics.add.sprite(20, 300, "moderngirl", 0);
       moderngirl.setBounce(0.5);
       moderngirl.setCollideWorldBounds(true);
       this.anims.create({
         key: "turnleft",
         frames: this.anims.generateFrameNames("moderngirl", {
-          start: 0,
-          end: 3
+          start: 4,
+          end: 7
         }),
         frameRate: 10,
         repeat: -1
@@ -774,8 +830,8 @@ var LevelTwoScene = /*#__PURE__*/function (_Phaser$Scene) {
       this.anims.create({
         key: "turnright",
         frames: this.anims.generateFrameNames("moderngirl", {
-          start: 4,
-          end: 7
+          start: 8,
+          end: 11
         }),
         frameRate: 10,
         repeat: -1
