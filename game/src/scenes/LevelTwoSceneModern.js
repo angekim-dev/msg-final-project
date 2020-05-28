@@ -11,6 +11,7 @@ let score = 120;
 let scoreText;
 let button;
 let fullscreenText;
+let playButton;
 
 let crystal1;
 let crystal2;
@@ -23,9 +24,7 @@ function collectStar(moderngirl, star) {
     fullscreenText.setText("press f for fullscreen modus");
 
     if (stars.countActive(true) === 0) {
-        stars.children.iterate(function (child) {
-            child.enableBody(true, child.x, 0, true, true);
-        });
+        playButton.visible = true;
     }
 
     let x =
@@ -116,14 +115,15 @@ export class LevelTwoSceneModern extends Phaser.Scene {
         cursors = this.input.keyboard.createCursorKeys();
 
         this.physics.add.collider(moderngirl, platforms);
+        this.physics.add.collider(moderngirl, question1, hitQuestion1);
+
         this.physics.add.collider(
             moderngirl,
-            question,
-            hitQuestion,
+            question2,
+            hitQuestion2,
             null,
             this
         );
-
         stars = this.physics.add.group({
             key: "star",
             repeat: 8,
@@ -137,7 +137,7 @@ export class LevelTwoSceneModern extends Phaser.Scene {
         this.physics.add.collider(stars, platforms);
         this.physics.add.overlap(moderngirl, stars, collectStar, null, this);
 
-        scoreText = this.add.text(280, 10, "Your score: 0", {
+        scoreText = this.add.text(280, 10, "Your score: 120", {
             fontSize: "32px",
             fill: "#000",
         });
@@ -187,6 +187,18 @@ export class LevelTwoSceneModern extends Phaser.Scene {
             },
             this
         );
+        playButton = this.add
+            .image(
+                this.game.renderer.width / 2,
+                this.game.renderer.height / 2,
+                "play_button.png"
+            )
+            .setDepth(1);
+        playButton.visible = false;
+        playButton.setInteractive();
+        playButton.on("pointerup", () => {
+            this.scene.start(CST.SCENES.LEVELTHREEMODERN);
+        });
     }
     update() {
         if (cursors.left.isDown) {

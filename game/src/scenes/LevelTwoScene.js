@@ -11,6 +11,7 @@ let score = 120;
 let scoreText;
 let button;
 let fullscreenText;
+let playButton;
 
 let crystal1;
 let crystal2;
@@ -23,9 +24,7 @@ function collectStar(jasmine, star) {
     fullscreenText.setText("press f for fullscreen modus");
 
     if (stars.countActive(true) === 0) {
-        stars.children.iterate(function (child) {
-            child.enableBody(true, child.x, 0, true, true);
-        });
+        playButton.visible = true;
     }
 
     let x =
@@ -133,7 +132,7 @@ export class LevelTwoScene extends Phaser.Scene {
         this.physics.add.collider(stars, platforms);
         this.physics.add.overlap(jasmine, stars, collectStar, null, this);
 
-        scoreText = this.add.text(280, 10, "Your score: 0", {
+        scoreText = this.add.text(280, 10, "Your score: 120", {
             fontSize: "32px",
             fill: "#000",
         });
@@ -183,6 +182,18 @@ export class LevelTwoScene extends Phaser.Scene {
             },
             this
         );
+        playButton = this.add
+            .image(
+                this.game.renderer.width / 2,
+                this.game.renderer.height / 2,
+                "play_button.png"
+            )
+            .setDepth(1);
+        playButton.visible = false;
+        playButton.setInteractive();
+        playButton.on("pointerup", () => {
+            this.scene.start(CST.SCENES.LEVELTHREE);
+        });
     }
     update() {
         if (cursors.left.isDown) {

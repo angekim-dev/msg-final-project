@@ -132,7 +132,9 @@ var CST = {
     OPTIONS: "OPTIONS",
     LEVELTWO: "LEVELTWO",
     LEVELONEMODERN: "LEVELONEMODERN",
-    LEVELTWOMODERN: "LEVELTWOMODERN"
+    LEVELTWOMODERN: "LEVELTWOMODERN",
+    LEVELTHREE: "LEVELTHREE",
+    LEVELTHREEMODERN: "LEVELTHREEMODERN"
   }
 };
 exports.CST = CST;
@@ -376,7 +378,7 @@ var MenuScene = /*#__PURE__*/function (_Phaser$Scene) {
       playButton.on("pointerup", function () {
         console.log("up");
 
-        _this.scene.start(_CST.CST.SCENES.LEVELTWO);
+        _this.scene.start(_CST.CST.SCENES.LEVELONE);
       });
       optionsButton.setInteractive();
       optionsButton.on("pointerover", function () {
@@ -778,6 +780,7 @@ var score = 120;
 var scoreText;
 var button;
 var fullscreenText;
+var playButton;
 var crystal1;
 var crystal2;
 
@@ -788,9 +791,7 @@ function collectStar(jasmine, star) {
   fullscreenText.setText("press f for fullscreen modus");
 
   if (stars.countActive(true) === 0) {
-    stars.children.iterate(function (child) {
-      child.enableBody(true, child.x, 0, true, true);
-    });
+    playButton.visible = true;
   }
 
   var x = jasmine.x < 400 ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
@@ -828,6 +829,8 @@ var LevelTwoScene = /*#__PURE__*/function (_Phaser$Scene) {
   }, {
     key: "create",
     value: function create() {
+      var _this = this;
+
       this.add.image(0, 0, "mainbg").setOrigin(0).setDepth(0);
       platforms = this.physics.add.staticGroup();
       platforms.create(400, 600, "grass").setScale(2).refreshBody();
@@ -898,7 +901,7 @@ var LevelTwoScene = /*#__PURE__*/function (_Phaser$Scene) {
       });
       this.physics.add.collider(stars, platforms);
       this.physics.add.overlap(jasmine, stars, collectStar, null, this);
-      scoreText = this.add.text(280, 10, "Your score: 0", {
+      scoreText = this.add.text(280, 10, "Your score: 120", {
         fontSize: "32px",
         fill: "#000"
       });
@@ -926,6 +929,12 @@ var LevelTwoScene = /*#__PURE__*/function (_Phaser$Scene) {
           this.scale.startFullscreen();
         }
       }, this);
+      playButton = this.add.image(this.game.renderer.width / 2, this.game.renderer.height / 2, "play_button.png").setDepth(1);
+      playButton.visible = false;
+      playButton.setInteractive();
+      playButton.on("pointerup", function () {
+        _this.scene.start(_CST.CST.SCENES.LEVELTHREE);
+      });
     }
   }, {
     key: "update",
@@ -1202,6 +1211,7 @@ var score = 120;
 var scoreText;
 var button;
 var fullscreenText;
+var playButton;
 var crystal1;
 var crystal2;
 
@@ -1212,9 +1222,7 @@ function collectStar(moderngirl, star) {
   fullscreenText.setText("press f for fullscreen modus");
 
   if (stars.countActive(true) === 0) {
-    stars.children.iterate(function (child) {
-      child.enableBody(true, child.x, 0, true, true);
-    });
+    playButton.visible = true;
   }
 
   var x = moderngirl.x < 400 ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
@@ -1252,6 +1260,8 @@ var LevelTwoSceneModern = /*#__PURE__*/function (_Phaser$Scene) {
   }, {
     key: "create",
     value: function create() {
+      var _this = this;
+
       this.add.image(0, 0, "mainbg").setOrigin(0).setDepth(0);
       platforms = this.physics.add.staticGroup();
       platforms.create(400, 600, "grass").setScale(2).refreshBody();
@@ -1306,7 +1316,8 @@ var LevelTwoSceneModern = /*#__PURE__*/function (_Phaser$Scene) {
       });
       cursors = this.input.keyboard.createCursorKeys();
       this.physics.add.collider(moderngirl, platforms);
-      this.physics.add.collider(moderngirl, question, hitQuestion, null, this);
+      this.physics.add.collider(moderngirl, question1, hitQuestion1);
+      this.physics.add.collider(moderngirl, question2, hitQuestion2, null, this);
       stars = this.physics.add.group({
         key: "star",
         repeat: 8,
@@ -1321,7 +1332,345 @@ var LevelTwoSceneModern = /*#__PURE__*/function (_Phaser$Scene) {
       });
       this.physics.add.collider(stars, platforms);
       this.physics.add.overlap(moderngirl, stars, collectStar, null, this);
-      scoreText = this.add.text(280, 10, "Your score: 0", {
+      scoreText = this.add.text(280, 10, "Your score: 120", {
+        fontSize: "32px",
+        fill: "#000"
+      });
+      fullscreenText = this.add.text(420, 570, "press f for fullscreen modus", {
+        fontSize: "22px",
+        fill: "#000"
+      });
+      button = this.add.image(800 - 16, 16, "fullscreen", 0).setOrigin(1, 0).setInteractive();
+      button.on("pointerup", function () {
+        if (this.scale.isFullscreen) {
+          button.setFrame(0);
+          this.scale.stopFullscreen();
+        } else {
+          button.setFrame(1);
+          this.scale.startFullscreen();
+        }
+      }, this);
+      var fKey = this.input.keyboard.addKey("F");
+      fKey.on("down", function () {
+        if (this.scale.isFullscreen) {
+          button.setFrame(0);
+          this.scale.stopFullscreen();
+        } else {
+          button.setFrame(1);
+          this.scale.startFullscreen();
+        }
+      }, this);
+      playButton = this.add.image(this.game.renderer.width / 2, this.game.renderer.height / 2, "play_button.png").setDepth(1);
+      playButton.visible = false;
+      playButton.setInteractive();
+      playButton.on("pointerup", function () {
+        _this.scene.start(_CST.CST.SCENES.LEVELTHREEMODERN);
+      });
+    }
+  }, {
+    key: "update",
+    value: function update() {
+      if (cursors.left.isDown) {
+        moderngirl.setVelocityX(-160);
+        moderngirl.anims.play("turnleft", true);
+      } else if (cursors.right.isDown) {
+        moderngirl.setVelocityX(160);
+        moderngirl.anims.play("turnright", true);
+      } else {
+        moderngirl.setVelocityX(0);
+        moderngirl.anims.play("turnstraight");
+      }
+
+      if (cursors.up.isDown && moderngirl.body.touching.down) {
+        moderngirl.setVelocityY(-330);
+      }
+    }
+  }]);
+
+  return LevelTwoSceneModern;
+}(Phaser.Scene);
+
+exports.LevelTwoSceneModern = LevelTwoSceneModern;
+},{"../CST":"src/CST.js"}],"src/scenes/LevelThreeScene.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.LevelThreeScene = void 0;
+
+var _CST = require("../CST");
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function () { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+var jasmine;
+var cursors;
+var stars;
+var score = 210;
+var scoreText;
+var button;
+var fullscreenText;
+
+function collectStar(jasmine, star) {
+  star.disableBody(true, true);
+  score += 10;
+  scoreText.setText("Your score: " + score);
+  fullscreenText.setText("press f for fullscreen modus");
+  var x = jasmine.x < 400 ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
+}
+
+var LevelThreeScene = /*#__PURE__*/function (_Phaser$Scene) {
+  _inherits(LevelThreeScene, _Phaser$Scene);
+
+  var _super = _createSuper(LevelThreeScene);
+
+  function LevelThreeScene() {
+    _classCallCheck(this, LevelThreeScene);
+
+    return _super.call(this, {
+      key: _CST.CST.SCENES.LEVELTHREE
+    });
+  }
+
+  _createClass(LevelThreeScene, [{
+    key: "init",
+    value: function init() {}
+  }, {
+    key: "preload",
+    value: function preload() {}
+  }, {
+    key: "create",
+    value: function create() {
+      this.add.image(0, 0, "mainbg").setOrigin(0).setDepth(0);
+      jasmine = this.physics.add.sprite(20, 300, "jasmine", 0);
+      jasmine.setBounce(0.5);
+      jasmine.setCollideWorldBounds(true);
+      this.anims.create({
+        key: "left",
+        frames: this.anims.generateFrameNames("jasmine", {
+          start: 4,
+          end: 7
+        }),
+        frameRate: 10,
+        repeat: -1
+      });
+      this.anims.create({
+        key: "turn",
+        frames: [{
+          key: "jasmine",
+          frame: 0
+        }],
+        frameRate: 20
+      });
+      this.anims.create({
+        key: "right",
+        frames: this.anims.generateFrameNames("jasmine", {
+          start: 8,
+          end: 11
+        }),
+        frameRate: 10,
+        repeat: -1
+      });
+      cursors = this.input.keyboard.createCursorKeys();
+      stars = this.physics.add.group({
+        key: "star",
+        repeat: 8,
+        setXY: {
+          x: 12,
+          y: 0,
+          stepX: 90
+        }
+      });
+      stars.children.iterate(function (child) {
+        child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.5));
+      });
+      scoreText = this.add.text(280, 10, "Your score: 210", {
+        fontSize: "32px",
+        fill: "#000"
+      });
+      fullscreenText = this.add.text(420, 570, "press f for fullscreen modus", {
+        fontSize: "22px",
+        fill: "#000"
+      });
+      button = this.add.image(800 - 16, 16, "fullscreen", 0).setOrigin(1, 0).setInteractive();
+      button.on("pointerup", function () {
+        if (this.scale.isFullscreen) {
+          button.setFrame(0);
+          this.scale.stopFullscreen();
+        } else {
+          button.setFrame(1);
+          this.scale.startFullscreen();
+        }
+      }, this);
+      var fKey = this.input.keyboard.addKey("F");
+      fKey.on("down", function () {
+        if (this.scale.isFullscreen) {
+          button.setFrame(0);
+          this.scale.stopFullscreen();
+        } else {
+          button.setFrame(1);
+          this.scale.startFullscreen();
+        }
+      }, this);
+    }
+  }, {
+    key: "update",
+    value: function update() {
+      if (cursors.left.isDown) {
+        jasmine.setVelocityX(-160);
+        jasmine.anims.play("left", true);
+      } else if (cursors.right.isDown) {
+        jasmine.setVelocityX(160);
+        jasmine.anims.play("right", true);
+      } else {
+        jasmine.setVelocityX(0);
+        jasmine.anims.play("turn");
+      }
+
+      if (cursors.up.isDown && jasmine.body.touching.down) {
+        jasmine.setVelocityY(-330);
+      }
+    }
+  }]);
+
+  return LevelThreeScene;
+}(Phaser.Scene);
+
+exports.LevelThreeScene = LevelThreeScene;
+},{"../CST":"src/CST.js"}],"src/scenes/LevelThreeSceneModern.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.LevelThreeSceneModern = void 0;
+
+var _CST = require("../CST");
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function () { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+var moderngirl;
+var cursors;
+var stars;
+var score = 210;
+var scoreText;
+var button;
+var fullscreenText;
+
+function collectStar(moderngirl, star) {
+  star.disableBody(true, true);
+  score += 10;
+  scoreText.setText("Your score: " + score);
+  fullscreenText.setText("press f for fullscreen modus");
+  var x = moderngirl.x < 400 ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
+}
+
+var LevelThreeSceneModern = /*#__PURE__*/function (_Phaser$Scene) {
+  _inherits(LevelThreeSceneModern, _Phaser$Scene);
+
+  var _super = _createSuper(LevelThreeSceneModern);
+
+  function LevelThreeSceneModern() {
+    _classCallCheck(this, LevelThreeSceneModern);
+
+    return _super.call(this, {
+      key: _CST.CST.SCENES.LEVELTHREEMODERN
+    });
+  }
+
+  _createClass(LevelThreeSceneModern, [{
+    key: "init",
+    value: function init() {}
+  }, {
+    key: "preload",
+    value: function preload() {}
+  }, {
+    key: "create",
+    value: function create() {
+      this.add.image(0, 0, "mainbg").setOrigin(0).setDepth(0);
+      moderngirl = this.physics.add.sprite(20, 300, "moderngirl", 0);
+      moderngirl.setBounce(0.5);
+      moderngirl.setCollideWorldBounds(true);
+      this.anims.create({
+        key: "left",
+        frames: this.anims.generateFrameNames("moderngirl", {
+          start: 4,
+          end: 7
+        }),
+        frameRate: 10,
+        repeat: -1
+      });
+      this.anims.create({
+        key: "turn",
+        frames: [{
+          key: "moderngirl",
+          frame: 0
+        }],
+        frameRate: 20
+      });
+      this.anims.create({
+        key: "right",
+        frames: this.anims.generateFrameNames("moderngirl", {
+          start: 8,
+          end: 11
+        }),
+        frameRate: 10,
+        repeat: -1
+      });
+      cursors = this.input.keyboard.createCursorKeys();
+      stars = this.physics.add.group({
+        key: "star",
+        repeat: 8,
+        setXY: {
+          x: 12,
+          y: 0,
+          stepX: 90
+        }
+      });
+      stars.children.iterate(function (child) {
+        child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.5));
+      });
+      scoreText = this.add.text(280, 10, "Your score: 210", {
         fontSize: "32px",
         fill: "#000"
       });
@@ -1355,13 +1704,13 @@ var LevelTwoSceneModern = /*#__PURE__*/function (_Phaser$Scene) {
     value: function update() {
       if (cursors.left.isDown) {
         moderngirl.setVelocityX(-160);
-        moderngirl.anims.play("turnleft", true);
+        moderngirl.anims.play("left", true);
       } else if (cursors.right.isDown) {
         moderngirl.setVelocityX(160);
-        moderngirl.anims.play("turnright", true);
+        moderngirl.anims.play("right", true);
       } else {
         moderngirl.setVelocityX(0);
-        moderngirl.anims.play("turnstraight");
+        moderngirl.anims.play("turn");
       }
 
       if (cursors.up.isDown && moderngirl.body.touching.down) {
@@ -1370,10 +1719,10 @@ var LevelTwoSceneModern = /*#__PURE__*/function (_Phaser$Scene) {
     }
   }]);
 
-  return LevelTwoSceneModern;
+  return LevelThreeSceneModern;
 }(Phaser.Scene);
 
-exports.LevelTwoSceneModern = LevelTwoSceneModern;
+exports.LevelThreeSceneModern = LevelThreeSceneModern;
 },{"../CST":"src/CST.js"}],"src/main.js":[function(require,module,exports) {
 "use strict";
 
@@ -1390,6 +1739,10 @@ var _LevelTwoScene = require("./scenes/LevelTwoScene");
 var _LevelOneSceneModern = require("./scenes/LevelOneSceneModern");
 
 var _LevelTwoSceneModern = require("./scenes/LevelTwoSceneModern");
+
+var _LevelThreeScene = require("./scenes/LevelThreeScene");
+
+var _LevelThreeSceneModern = require("./scenes/LevelThreeSceneModern");
 
 console.log("connected!");
 var config = {
@@ -1409,13 +1762,13 @@ var config = {
       debug: false
     }
   },
-  scene: [_LoadScene.LoadScene, _MenuScene.MenuScene, _LevelOneScene.LevelOneScene, _OptionsScene.OptionsScene, _LevelTwoScene.LevelTwoScene, _LevelOneSceneModern.LevelOneSceneModern, _LevelTwoSceneModern.LevelTwoSceneModern],
+  scene: [_LoadScene.LoadScene, _MenuScene.MenuScene, _LevelOneScene.LevelOneScene, _OptionsScene.OptionsScene, _LevelTwoScene.LevelTwoScene, _LevelOneSceneModern.LevelOneSceneModern, _LevelTwoSceneModern.LevelTwoSceneModern, _LevelThreeScene.LevelThreeScene, _LevelThreeSceneModern.LevelThreeSceneModern],
   render: {
     pixelArt: true
   }
 };
 var game = new Phaser.Game(config);
-},{"./scenes/LoadScene":"src/scenes/LoadScene.js","./scenes/MenuScene":"src/scenes/MenuScene.js","./scenes/LevelOneScene":"src/scenes/LevelOneScene.js","./scenes/OptionsScene":"src/scenes/OptionsScene.js","./scenes/LevelTwoScene":"src/scenes/LevelTwoScene.js","./scenes/LevelOneSceneModern":"src/scenes/LevelOneSceneModern.js","./scenes/LevelTwoSceneModern":"src/scenes/LevelTwoSceneModern.js"}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./scenes/LoadScene":"src/scenes/LoadScene.js","./scenes/MenuScene":"src/scenes/MenuScene.js","./scenes/LevelOneScene":"src/scenes/LevelOneScene.js","./scenes/OptionsScene":"src/scenes/OptionsScene.js","./scenes/LevelTwoScene":"src/scenes/LevelTwoScene.js","./scenes/LevelOneSceneModern":"src/scenes/LevelOneSceneModern.js","./scenes/LevelTwoSceneModern":"src/scenes/LevelTwoSceneModern.js","./scenes/LevelThreeScene":"src/scenes/LevelThreeScene.js","./scenes/LevelThreeSceneModern":"src/scenes/LevelThreeSceneModern.js"}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -1443,7 +1796,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49605" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50841" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
