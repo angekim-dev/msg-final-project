@@ -30,6 +30,10 @@ function collectStar(jasmine, star) {
             : Phaser.Math.Between(0, 400);
 }
 
+function hitQuestion(jasmine, question) {
+    question.setTint(0x000000);
+}
+
 export class LevelTwoScene extends Phaser.Scene {
     constructor() {
         super({
@@ -86,7 +90,7 @@ export class LevelTwoScene extends Phaser.Scene {
         cursors = this.input.keyboard.createCursorKeys();
 
         this.physics.add.collider(jasmine, platforms);
-        this.physics.add.collider(jasmine, question);
+        this.physics.add.collider(jasmine, question, hitQuestion, null, this);
 
         stars = this.physics.add.group({
             key: "star",

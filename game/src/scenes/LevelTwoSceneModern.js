@@ -30,6 +30,10 @@ function collectStar(moderngirl, star) {
             : Phaser.Math.Between(0, 400);
 }
 
+function hitQuestion(moderngirl, question) {
+    question.setTint(0x000000);
+}
+
 export class LevelTwoSceneModern extends Phaser.Scene {
     constructor() {
         super({
@@ -86,7 +90,13 @@ export class LevelTwoSceneModern extends Phaser.Scene {
         cursors = this.input.keyboard.createCursorKeys();
 
         this.physics.add.collider(moderngirl, platforms);
-        this.physics.add.collider(jasmine, question);
+        this.physics.add.collider(
+            moderngirl,
+            question,
+            hitQuestion,
+            null,
+            this
+        );
 
         stars = this.physics.add.group({
             key: "star",

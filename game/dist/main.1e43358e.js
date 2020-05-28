@@ -789,6 +789,10 @@ function collectStar(jasmine, star) {
   var x = jasmine.x < 400 ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
 }
 
+function hitQuestion(jasmine, question) {
+  question.setTint(0x000000);
+}
+
 var LevelTwoScene = /*#__PURE__*/function (_Phaser$Scene) {
   _inherits(LevelTwoScene, _Phaser$Scene);
 
@@ -851,7 +855,7 @@ var LevelTwoScene = /*#__PURE__*/function (_Phaser$Scene) {
       });
       cursors = this.input.keyboard.createCursorKeys();
       this.physics.add.collider(jasmine, platforms);
-      this.physics.add.collider(jasmine, question);
+      this.physics.add.collider(jasmine, question, hitQuestion, null, this);
       stars = this.physics.add.group({
         key: "star",
         repeat: 8,
@@ -1185,6 +1189,10 @@ function collectStar(moderngirl, star) {
   var x = moderngirl.x < 400 ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
 }
 
+function hitQuestion(moderngirl, question) {
+  question.setTint(0x000000);
+}
+
 var LevelTwoSceneModern = /*#__PURE__*/function (_Phaser$Scene) {
   _inherits(LevelTwoSceneModern, _Phaser$Scene);
 
@@ -1247,7 +1255,7 @@ var LevelTwoSceneModern = /*#__PURE__*/function (_Phaser$Scene) {
       });
       cursors = this.input.keyboard.createCursorKeys();
       this.physics.add.collider(moderngirl, platforms);
-      this.physics.add.collider(jasmine, question);
+      this.physics.add.collider(moderngirl, question, hitQuestion, null, this);
       stars = this.physics.add.group({
         key: "star",
         repeat: 8,
