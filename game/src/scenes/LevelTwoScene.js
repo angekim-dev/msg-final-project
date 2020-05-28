@@ -4,7 +4,8 @@ let platforms;
 let jasmine;
 let cursors;
 let stars;
-let question;
+let question1;
+let question2;
 
 let score = 120;
 let scoreText;
@@ -33,8 +34,14 @@ function collectStar(jasmine, star) {
             : Phaser.Math.Between(0, 400);
 }
 
-function hitQuestion(jasmine, question) {
-    question.setTint(0x000000);
+function hitQuestion1(jasmine, question1) {
+    question1.setTint(0x000000);
+    crystal1.setVisible(false);
+}
+
+function hitQuestion2(jasmine, question2) {
+    question2.setTint(0x000000);
+    crystal2.setVisible(false);
 }
 
 export class LevelTwoScene extends Phaser.Scene {
@@ -55,9 +62,10 @@ export class LevelTwoScene extends Phaser.Scene {
         platforms.create(350, 400, "grass");
         platforms.create(700, 150, "grass");
 
-        question = this.physics.add.staticGroup();
-        question.create(220, 270, "question");
-        question.create(355, 200, "question");
+        question1 = this.physics.add.staticGroup();
+        question1.create(220, 270, "question");
+        question2 = this.physics.add.staticGroup();
+        question2.create(355, 200, "question");
 
         crystal1 = this.add.sprite(220, 215, "crystal", 0).setInteractive();
         crystal2 = this.add.sprite(355, 145, "crystal", 0).setInteractive();
@@ -108,7 +116,9 @@ export class LevelTwoScene extends Phaser.Scene {
         cursors = this.input.keyboard.createCursorKeys();
 
         this.physics.add.collider(jasmine, platforms);
-        this.physics.add.collider(jasmine, question, hitQuestion, null, this);
+        this.physics.add.collider(jasmine, question1, hitQuestion1);
+
+        this.physics.add.collider(jasmine, question2, hitQuestion2, null, this);
 
         stars = this.physics.add.group({
             key: "star",
