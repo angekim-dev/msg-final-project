@@ -11,6 +11,9 @@ let scoreText;
 let button;
 let fullscreenText;
 
+let crystal1;
+let crystal2;
+
 function collectStar(jasmine, star) {
     star.disableBody(true, true);
 
@@ -55,6 +58,21 @@ export class LevelTwoScene extends Phaser.Scene {
         question = this.physics.add.staticGroup();
         question.create(220, 270, "question");
         question.create(355, 200, "question");
+
+        crystal1 = this.add.sprite(220, 215, "crystal", 0).setInteractive();
+        crystal2 = this.add.sprite(355, 145, "crystal", 0).setInteractive();
+
+        this.anims.create({
+            key: "circle",
+            repeat: -1,
+            frameRate: 5,
+            frames: this.anims.generateFrameNames("crystal", {
+                start: 0,
+                end: 7,
+            }),
+        });
+        crystal1.play("circle");
+        crystal2.play("circle");
 
         jasmine = this.physics.add.sprite(20, 300, "jasmine", 0);
 

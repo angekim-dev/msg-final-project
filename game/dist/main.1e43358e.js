@@ -226,6 +226,10 @@ var LoadScene = /*#__PURE__*/function (_Phaser$Scene) {
         frameWidth: 64,
         frameHeight: 64
       });
+      this.load.spritesheet("crystal", "./assets/crystal.png", {
+        frameWidth: 32,
+        frameHeight: 32
+      });
       this.load.image("tile", "./assets/tile.png");
       this.load.scenePlugin("AnimatedTiles", "AnimatedTiles.js", "animatedTiles", "animatedTiles"); // create loading bar
 
@@ -773,6 +777,8 @@ var score = 120;
 var scoreText;
 var button;
 var fullscreenText;
+var crystal1;
+var crystal2;
 
 function collectStar(jasmine, star) {
   star.disableBody(true, true);
@@ -824,6 +830,19 @@ var LevelTwoScene = /*#__PURE__*/function (_Phaser$Scene) {
       question = this.physics.add.staticGroup();
       question.create(220, 270, "question");
       question.create(355, 200, "question");
+      crystal1 = this.add.sprite(220, 215, "crystal", 0).setInteractive();
+      crystal2 = this.add.sprite(355, 145, "crystal", 0).setInteractive();
+      this.anims.create({
+        key: "circle",
+        repeat: -1,
+        frameRate: 5,
+        frames: this.anims.generateFrameNames("crystal", {
+          start: 0,
+          end: 7
+        })
+      });
+      crystal1.play("circle");
+      crystal2.play("circle");
       jasmine = this.physics.add.sprite(20, 300, "jasmine", 0);
       jasmine.setBounce(0.5);
       jasmine.setCollideWorldBounds(true);
@@ -1173,6 +1192,8 @@ var score = 120;
 var scoreText;
 var button;
 var fullscreenText;
+var crystal1;
+var crystal2;
 
 function collectStar(moderngirl, star) {
   star.disableBody(true, true);
@@ -1224,6 +1245,19 @@ var LevelTwoSceneModern = /*#__PURE__*/function (_Phaser$Scene) {
       question = this.physics.add.staticGroup();
       question.create(220, 270, "question");
       question.create(355, 200, "question");
+      crystal1 = this.add.sprite(220, 215, "crystal", 0).setInteractive();
+      crystal2 = this.add.sprite(355, 145, "crystal", 0).setInteractive();
+      this.anims.create({
+        key: "circle",
+        repeat: -1,
+        frameRate: 5,
+        frames: this.anims.generateFrameNames("crystal", {
+          start: 0,
+          end: 7
+        })
+      });
+      crystal1.play("circle");
+      crystal2.play("circle");
       moderngirl = this.physics.add.sprite(20, 300, "moderngirl", 0);
       moderngirl.setBounce(0.5);
       moderngirl.setCollideWorldBounds(true);

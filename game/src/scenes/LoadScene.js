@@ -46,6 +46,10 @@ export class LoadScene extends Phaser.Scene {
             frameWidth: 64,
             frameHeight: 64,
         });
+        this.load.spritesheet("crystal", "./assets/crystal.png", {
+            frameWidth: 32,
+            frameHeight: 32,
+        });
 
         this.load.image("tile", "./assets/tile.png");
         this.load.scenePlugin(
