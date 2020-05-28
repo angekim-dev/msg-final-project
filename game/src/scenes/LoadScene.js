@@ -42,6 +42,10 @@ export class LoadScene extends Phaser.Scene {
             frameWidth: 64,
             frameHeight: 64,
         });
+        this.load.spritesheet("redline", "./assets/redline.png", {
+            frameWidth: 64,
+            frameHeight: 64,
+        });
         this.load.spritesheet("back", "./assets/back.png", {
             frameWidth: 64,
             frameHeight: 64,

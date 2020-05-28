@@ -224,6 +224,10 @@ var LoadScene = /*#__PURE__*/function (_Phaser$Scene) {
         frameWidth: 64,
         frameHeight: 64
       });
+      this.load.spritesheet("redline", "./assets/redline.png", {
+        frameWidth: 64,
+        frameHeight: 64
+      });
       this.load.spritesheet("back", "./assets/back.png", {
         frameWidth: 64,
         frameHeight: 64
@@ -449,6 +453,7 @@ var fullscreenText;
 var playButton;
 var ping;
 var sound;
+var cancelsound;
 
 function collectStar(jasmine, star) {
   star.disableBody(true, true);
@@ -559,7 +564,15 @@ var LevelOneScene = /*#__PURE__*/function (_Phaser$Scene) {
       });
       sound = this.add.sprite(50, 50, "sound").setDepth(1).setScale(1).setInteractive();
       sound.on("pointerup", function () {
+        cancelsound = _this.add.sprite(50, 50, "redline").setDepth(1).setScale(1).setInteractive();
         _this.sound.mute = true;
+
+        if (_this.sound.mute = true) {
+          cancelsound.on("pointerup", function () {
+            _this.sound.mute = false;
+            cancelsound.visible = false;
+          });
+        }
       });
       button = this.add.sprite(750, 50, "fullscreen").setDepth(1).setScale(1).setInteractive();
       button.on("pointerup", function () {

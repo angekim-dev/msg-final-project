@@ -13,6 +13,7 @@ let playButton;
 
 let ping;
 let sound;
+let cancelsound;
 
 function collectStar(jasmine, star) {
     star.disableBody(true, true);
@@ -129,7 +130,18 @@ export class LevelOneScene extends Phaser.Scene {
             .setInteractive();
 
         sound.on("pointerup", () => {
+            cancelsound = this.add
+                .sprite(50, 50, "redline")
+                .setDepth(1)
+                .setScale(1)
+                .setInteractive();
             this.sound.mute = true;
+            if ((this.sound.mute = true)) {
+                cancelsound.on("pointerup", () => {
+                    this.sound.mute = false;
+                    cancelsound.visible = false;
+                });
+            }
         });
 
         button = this.add
