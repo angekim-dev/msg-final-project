@@ -16,10 +16,15 @@ let playButton;
 let crystal1;
 let crystal2;
 
+let ping;
+let sound;
+let cancelsound;
+
 function collectStar(jasmine, star) {
     star.disableBody(true, true);
 
     score += 10;
+    ping.play();
     scoreText.setText("Your score: " + score);
     fullscreenText.setText("press f for fullscreen modus");
 
@@ -147,6 +152,27 @@ export class LevelTwoScene extends Phaser.Scene {
             }
         );
 
+        sound = this.add
+            .sprite(50, 50, "sound")
+            .setDepth(1)
+            .setScale(1)
+            .setInteractive();
+
+        sound.on("pointerup", () => {
+            cancelsound = this.add
+                .sprite(50, 50, "redline")
+                .setDepth(1)
+                .setScale(1)
+                .setInteractive();
+            this.sound.mute = true;
+            if ((this.sound.mute = true)) {
+                cancelsound.on("pointerup", () => {
+                    this.sound.mute = false;
+                    cancelsound.visible = false;
+                });
+            }
+        });
+
         button = this.add
             .image(800 - 16, 16, "fullscreen", 0)
             .setOrigin(1, 0)
@@ -194,6 +220,10 @@ export class LevelTwoScene extends Phaser.Scene {
         playButton.on("pointerup", () => {
             this.scene.start(CST.SCENES.LEVELTHREE);
         });
+
+        ping = this.sound.add("ping");
+        ping.allowMultiple = true;
+        ping.addMarker("ping", 10, 1.0);
     }
     update() {
         if (cursors.left.isDown) {

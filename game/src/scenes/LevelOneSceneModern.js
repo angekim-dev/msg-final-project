@@ -11,6 +11,10 @@ let button;
 let fullscreenText;
 let playButton;
 
+let ping;
+let sound;
+let cancelsound;
+
 function reachedFifty() {
     moderngirl.setTint(0xff00ff);
     stars.setTint(0x00ff00);
@@ -25,6 +29,7 @@ function collectStar(moderngirl, star) {
     star.disableBody(true, true);
 
     score += 10;
+    ping.play();
     scoreText.setText("Your score: " + score);
     fullscreenText.setText("press f for fullscreen modus");
 
@@ -118,6 +123,27 @@ export class LevelOneSceneModern extends Phaser.Scene {
             }
         );
 
+        sound = this.add
+            .sprite(50, 50, "sound")
+            .setDepth(1)
+            .setScale(1)
+            .setInteractive();
+
+        sound.on("pointerup", () => {
+            cancelsound = this.add
+                .sprite(50, 50, "redline")
+                .setDepth(1)
+                .setScale(1)
+                .setInteractive();
+            this.sound.mute = true;
+            if ((this.sound.mute = true)) {
+                cancelsound.on("pointerup", () => {
+                    this.sound.mute = false;
+                    cancelsound.visible = false;
+                });
+            }
+        });
+
         button = this.add
             .sprite(750, 50, "fullscreen")
             .setDepth(1)
@@ -166,6 +192,10 @@ export class LevelOneSceneModern extends Phaser.Scene {
         playButton.on("pointerup", () => {
             this.scene.start(CST.SCENES.LEVELTWOMODERN);
         });
+
+        ping = this.sound.add("ping");
+        ping.allowMultiple = true;
+        ping.addMarker("ping", 10, 1.0);
     }
     update() {
         if (cursors.left.isDown) {
