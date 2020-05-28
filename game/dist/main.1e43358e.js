@@ -372,7 +372,7 @@ var MenuScene = /*#__PURE__*/function (_Phaser$Scene) {
       playButton.on("pointerup", function () {
         console.log("up");
 
-        _this.scene.start(_CST.CST.SCENES.LEVELONE);
+        _this.scene.start(_CST.CST.SCENES.LEVELTWO);
       });
       optionsButton.setInteractive();
       optionsButton.on("pointerover", function () {
@@ -768,6 +768,7 @@ var platforms;
 var jasmine;
 var cursors;
 var stars;
+var question;
 var score = 120;
 var scoreText;
 var button;
@@ -816,8 +817,9 @@ var LevelTwoScene = /*#__PURE__*/function (_Phaser$Scene) {
       platforms.create(-100, 200, "grass");
       platforms.create(350, 400, "grass");
       platforms.create(700, 150, "grass");
-      platforms.create(220, 270, "question");
-      platforms.create(355, 200, "question");
+      question = this.physics.add.staticGroup();
+      question.create(220, 270, "question");
+      question.create(355, 200, "question");
       jasmine = this.physics.add.sprite(20, 300, "jasmine", 0);
       jasmine.setBounce(0.5);
       jasmine.setCollideWorldBounds(true);
@@ -849,13 +851,14 @@ var LevelTwoScene = /*#__PURE__*/function (_Phaser$Scene) {
       });
       cursors = this.input.keyboard.createCursorKeys();
       this.physics.add.collider(jasmine, platforms);
+      this.physics.add.collider(jasmine, question);
       stars = this.physics.add.group({
         key: "star",
-        repeat: 11,
+        repeat: 8,
         setXY: {
           x: 12,
           y: 0,
-          stepX: 70
+          stepX: 90
         }
       });
       stars.children.iterate(function (child) {
@@ -1161,6 +1164,7 @@ var platforms;
 var moderngirl;
 var cursors;
 var stars;
+var question;
 var score = 120;
 var scoreText;
 var button;
@@ -1209,8 +1213,9 @@ var LevelTwoSceneModern = /*#__PURE__*/function (_Phaser$Scene) {
       platforms.create(-100, 200, "grass");
       platforms.create(350, 400, "grass");
       platforms.create(700, 150, "grass");
-      platforms.create(220, 270, "question");
-      platforms.create(355, 200, "question");
+      question = this.physics.add.staticGroup();
+      question.create(220, 270, "question");
+      question.create(355, 200, "question");
       moderngirl = this.physics.add.sprite(20, 300, "moderngirl", 0);
       moderngirl.setBounce(0.5);
       moderngirl.setCollideWorldBounds(true);
@@ -1242,13 +1247,14 @@ var LevelTwoSceneModern = /*#__PURE__*/function (_Phaser$Scene) {
       });
       cursors = this.input.keyboard.createCursorKeys();
       this.physics.add.collider(moderngirl, platforms);
+      this.physics.add.collider(jasmine, question);
       stars = this.physics.add.group({
         key: "star",
-        repeat: 11,
+        repeat: 8,
         setXY: {
           x: 12,
           y: 0,
-          stepX: 70
+          stepX: 90
         }
       });
       stars.children.iterate(function (child) {
@@ -1378,7 +1384,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54485" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49605" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

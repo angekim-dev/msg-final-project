@@ -4,6 +4,7 @@ let platforms;
 let jasmine;
 let cursors;
 let stars;
+let question;
 
 let score = 120;
 let scoreText;
@@ -46,8 +47,10 @@ export class LevelTwoScene extends Phaser.Scene {
         platforms.create(-100, 200, "grass");
         platforms.create(350, 400, "grass");
         platforms.create(700, 150, "grass");
-        platforms.create(220, 270, "question");
-        platforms.create(355, 200, "question");
+
+        question = this.physics.add.staticGroup();
+        question.create(220, 270, "question");
+        question.create(355, 200, "question");
 
         jasmine = this.physics.add.sprite(20, 300, "jasmine", 0);
 
@@ -83,11 +86,12 @@ export class LevelTwoScene extends Phaser.Scene {
         cursors = this.input.keyboard.createCursorKeys();
 
         this.physics.add.collider(jasmine, platforms);
+        this.physics.add.collider(jasmine, question);
 
         stars = this.physics.add.group({
             key: "star",
-            repeat: 11,
-            setXY: { x: 12, y: 0, stepX: 70 },
+            repeat: 8,
+            setXY: { x: 12, y: 0, stepX: 90 },
         });
 
         stars.children.iterate((child) => {
