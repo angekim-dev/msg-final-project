@@ -38,6 +38,10 @@ export class LoadScene extends Phaser.Scene {
             frameWidth: 64,
             frameHeight: 64,
         });
+        this.load.spritesheet("sound", "./assets/sound.png", {
+            frameWidth: 64,
+            frameHeight: 64,
+        });
         this.load.spritesheet("back", "./assets/back.png", {
             frameWidth: 64,
             frameHeight: 64,
@@ -58,6 +62,8 @@ export class LoadScene extends Phaser.Scene {
             "animatedTiles",
             "animatedTiles"
         );
+
+        this.load.audio("ping", "./assets/audio/p-ping.mp3");
 
         // create loading bar
 

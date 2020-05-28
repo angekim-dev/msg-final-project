@@ -220,6 +220,10 @@ var LoadScene = /*#__PURE__*/function (_Phaser$Scene) {
         frameWidth: 64,
         frameHeight: 64
       });
+      this.load.spritesheet("sound", "./assets/sound.png", {
+        frameWidth: 64,
+        frameHeight: 64
+      });
       this.load.spritesheet("back", "./assets/back.png", {
         frameWidth: 64,
         frameHeight: 64
@@ -233,7 +237,8 @@ var LoadScene = /*#__PURE__*/function (_Phaser$Scene) {
         frameHeight: 32
       });
       this.load.image("tile", "./assets/tile.png");
-      this.load.scenePlugin("AnimatedTiles", "AnimatedTiles.js", "animatedTiles", "animatedTiles"); // create loading bar
+      this.load.scenePlugin("AnimatedTiles", "AnimatedTiles.js", "animatedTiles", "animatedTiles");
+      this.load.audio("ping", "./assets/audio/p-ping.mp3"); // create loading bar
 
       var loadingBar = this.add.graphics({
         fillStyle: {
@@ -442,10 +447,13 @@ var scoreText;
 var button;
 var fullscreenText;
 var playButton;
+var ping;
+var sound;
 
 function collectStar(jasmine, star) {
   star.disableBody(true, true);
   score += 10;
+  ping.play();
   scoreText.setText("Your score: " + score);
   fullscreenText.setText("press f for fullscreen modus");
 
@@ -549,6 +557,10 @@ var LevelOneScene = /*#__PURE__*/function (_Phaser$Scene) {
         fontSize: "22px",
         fill: "#000"
       });
+      sound = this.add.sprite(50, 50, "sound").setDepth(1).setScale(1).setInteractive();
+      sound.on("pointerup", function () {
+        _this.sound.mute = true;
+      });
       button = this.add.sprite(750, 50, "fullscreen").setDepth(1).setScale(1).setInteractive();
       button.on("pointerup", function () {
         if (_this.scale.isFullscreen) {
@@ -577,6 +589,9 @@ var LevelOneScene = /*#__PURE__*/function (_Phaser$Scene) {
       playButton.on("pointerup", function () {
         _this.scene.start(_CST.CST.SCENES.LEVELTWO);
       });
+      ping = this.sound.add("ping");
+      ping.allowMultiple = true;
+      ping.addMarker("ping", 10, 1.0);
     }
   }, {
     key: "update",
