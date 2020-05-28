@@ -1280,10 +1280,14 @@ var fullscreenText;
 var playButton;
 var crystal1;
 var crystal2;
+var ping;
+var sound;
+var cancelsound;
 
 function collectStar(moderngirl, star) {
   star.disableBody(true, true);
   score += 10;
+  ping.play();
   scoreText.setText("Your score: " + score);
   fullscreenText.setText("press f for fullscreen modus");
 
@@ -1406,6 +1410,18 @@ var LevelTwoSceneModern = /*#__PURE__*/function (_Phaser$Scene) {
         fontSize: "22px",
         fill: "#000"
       });
+      sound = this.add.sprite(50, 50, "sound").setDepth(1).setScale(1).setInteractive();
+      sound.on("pointerup", function () {
+        cancelsound = _this.add.sprite(50, 50, "redline").setDepth(1).setScale(1).setInteractive();
+        _this.sound.mute = true;
+
+        if (_this.sound.mute = true) {
+          cancelsound.on("pointerup", function () {
+            _this.sound.mute = false;
+            cancelsound.visible = false;
+          });
+        }
+      });
       button = this.add.image(800 - 16, 16, "fullscreen", 0).setOrigin(1, 0).setInteractive();
       button.on("pointerup", function () {
         if (this.scale.isFullscreen) {
@@ -1432,6 +1448,9 @@ var LevelTwoSceneModern = /*#__PURE__*/function (_Phaser$Scene) {
       playButton.on("pointerup", function () {
         _this.scene.start(_CST.CST.SCENES.LEVELTHREEMODERN);
       });
+      ping = this.sound.add("ping");
+      ping.allowMultiple = true;
+      ping.addMarker("ping", 10, 1.0);
     }
   }, {
     key: "update",
@@ -1496,10 +1515,14 @@ var score = 210;
 var scoreText;
 var button;
 var fullscreenText;
+var ping;
+var sound;
+var cancelsound;
 
 function collectStar(jasmine, star) {
   star.disableBody(true, true);
   score += 10;
+  ping.play();
   scoreText.setText("Your score: " + score);
   fullscreenText.setText("press f for fullscreen modus");
   var x = jasmine.x < 400 ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
@@ -1527,6 +1550,8 @@ var LevelThreeScene = /*#__PURE__*/function (_Phaser$Scene) {
   }, {
     key: "create",
     value: function create() {
+      var _this = this;
+
       this.add.image(0, 0, "mainbg").setOrigin(0).setDepth(0);
       jasmine = this.physics.add.sprite(20, 300, "jasmine", 0);
       jasmine.setBounce(0.5);
@@ -1578,6 +1603,18 @@ var LevelThreeScene = /*#__PURE__*/function (_Phaser$Scene) {
         fontSize: "22px",
         fill: "#000"
       });
+      sound = this.add.sprite(50, 50, "sound").setDepth(1).setScale(1).setInteractive();
+      sound.on("pointerup", function () {
+        cancelsound = _this.add.sprite(50, 50, "redline").setDepth(1).setScale(1).setInteractive();
+        _this.sound.mute = true;
+
+        if (_this.sound.mute = true) {
+          cancelsound.on("pointerup", function () {
+            _this.sound.mute = false;
+            cancelsound.visible = false;
+          });
+        }
+      });
       button = this.add.image(800 - 16, 16, "fullscreen", 0).setOrigin(1, 0).setInteractive();
       button.on("pointerup", function () {
         if (this.scale.isFullscreen) {
@@ -1598,6 +1635,9 @@ var LevelThreeScene = /*#__PURE__*/function (_Phaser$Scene) {
           this.scale.startFullscreen();
         }
       }, this);
+      ping = this.sound.add("ping");
+      ping.allowMultiple = true;
+      ping.addMarker("ping", 10, 1.0);
     }
   }, {
     key: "update",
@@ -1662,10 +1702,14 @@ var score = 210;
 var scoreText;
 var button;
 var fullscreenText;
+var ping;
+var sound;
+var cancelsound;
 
 function collectStar(moderngirl, star) {
   star.disableBody(true, true);
   score += 10;
+  ping.play();
   scoreText.setText("Your score: " + score);
   fullscreenText.setText("press f for fullscreen modus");
   var x = moderngirl.x < 400 ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
@@ -1693,6 +1737,8 @@ var LevelThreeSceneModern = /*#__PURE__*/function (_Phaser$Scene) {
   }, {
     key: "create",
     value: function create() {
+      var _this = this;
+
       this.add.image(0, 0, "mainbg").setOrigin(0).setDepth(0);
       moderngirl = this.physics.add.sprite(20, 300, "moderngirl", 0);
       moderngirl.setBounce(0.5);
@@ -1744,6 +1790,18 @@ var LevelThreeSceneModern = /*#__PURE__*/function (_Phaser$Scene) {
         fontSize: "22px",
         fill: "#000"
       });
+      sound = this.add.sprite(50, 50, "sound").setDepth(1).setScale(1).setInteractive();
+      sound.on("pointerup", function () {
+        cancelsound = _this.add.sprite(50, 50, "redline").setDepth(1).setScale(1).setInteractive();
+        _this.sound.mute = true;
+
+        if (_this.sound.mute = true) {
+          cancelsound.on("pointerup", function () {
+            _this.sound.mute = false;
+            cancelsound.visible = false;
+          });
+        }
+      });
       button = this.add.image(800 - 16, 16, "fullscreen", 0).setOrigin(1, 0).setInteractive();
       button.on("pointerup", function () {
         if (this.scale.isFullscreen) {
@@ -1764,6 +1822,9 @@ var LevelThreeSceneModern = /*#__PURE__*/function (_Phaser$Scene) {
           this.scale.startFullscreen();
         }
       }, this);
+      ping = this.sound.add("ping");
+      ping.allowMultiple = true;
+      ping.addMarker("ping", 10, 1.0);
     }
   }, {
     key: "update",

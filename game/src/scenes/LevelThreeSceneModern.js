@@ -9,10 +9,15 @@ let scoreText;
 let button;
 let fullscreenText;
 
+let ping;
+let sound;
+let cancelsound;
+
 function collectStar(moderngirl, star) {
     star.disableBody(true, true);
 
     score += 10;
+    ping.play();
     scoreText.setText("Your score: " + score);
     fullscreenText.setText("press f for fullscreen modus");
 
@@ -89,6 +94,27 @@ export class LevelThreeSceneModern extends Phaser.Scene {
             }
         );
 
+        sound = this.add
+            .sprite(50, 50, "sound")
+            .setDepth(1)
+            .setScale(1)
+            .setInteractive();
+
+        sound.on("pointerup", () => {
+            cancelsound = this.add
+                .sprite(50, 50, "redline")
+                .setDepth(1)
+                .setScale(1)
+                .setInteractive();
+            this.sound.mute = true;
+            if ((this.sound.mute = true)) {
+                cancelsound.on("pointerup", () => {
+                    this.sound.mute = false;
+                    cancelsound.visible = false;
+                });
+            }
+        });
+
         button = this.add
             .image(800 - 16, 16, "fullscreen", 0)
             .setOrigin(1, 0)
@@ -124,6 +150,10 @@ export class LevelThreeSceneModern extends Phaser.Scene {
             },
             this
         );
+
+        ping = this.sound.add("ping");
+        ping.allowMultiple = true;
+        ping.addMarker("ping", 10, 1.0);
     }
     update() {
         if (cursors.left.isDown) {
