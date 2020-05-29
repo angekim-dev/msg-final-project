@@ -197,9 +197,10 @@ var LoadScene = /*#__PURE__*/function (_Phaser$Scene) {
       this.load.image("options_button.png", "./assets/options_button.png");
       this.load.image("play_button.png", "./assets/play_button.png");
       this.load.image("mushroom.png", "./assets/mushroom.png");
-      this.load.image("ground", "assets/platform.jpg");
-      this.load.image("grass", "assets/grass.jpeg");
-      this.load.image("star", "assets/collect.png");
+      this.load.image("ground", "./assets/platform.jpg");
+      this.load.image("grass", "./assets/grass.jpeg");
+      this.load.image("star", "./assets/collect.png");
+      this.load.image("bomb", "./assets/bomb.png");
       this.load.spritesheet("cat.png", "./assets/cat.png", {
         frameHeight: 100,
         frameWidth: 200
@@ -568,7 +569,7 @@ var LevelOneScene = /*#__PURE__*/function (_Phaser$Scene) {
         _this.sound.mute = true;
 
         if (_this.sound.mute = true) {
-          cancelsound.on("pointerup", function () {
+          sound.on("pointerup", function () {
             _this.sound.mute = false;
             cancelsound.visible = false;
           });
@@ -1518,6 +1519,8 @@ var fullscreenText;
 var ping;
 var sound;
 var cancelsound;
+var platforms;
+var tile;
 
 function collectStar(jasmine, star) {
   star.disableBody(true, true);
@@ -1553,6 +1556,13 @@ var LevelThreeScene = /*#__PURE__*/function (_Phaser$Scene) {
       var _this = this;
 
       this.add.image(0, 0, "mainbg").setOrigin(0).setDepth(0);
+      tile = this.physics.add.staticGroup();
+      tile.create(140, 510, "tile").refreshBody();
+      tile.create(300, 400, "tile");
+      tile.create(400, 200, "tile");
+      platforms = this.physics.add.staticGroup();
+      platforms.create(400, 600, "grass").setScale(2).refreshBody();
+      platforms.create(-100, 300, "grass");
       jasmine = this.physics.add.sprite(20, 300, "jasmine", 0);
       jasmine.setBounce(0.5);
       jasmine.setCollideWorldBounds(true);
@@ -1583,6 +1593,8 @@ var LevelThreeScene = /*#__PURE__*/function (_Phaser$Scene) {
         repeat: -1
       });
       cursors = this.input.keyboard.createCursorKeys();
+      this.physics.add.collider(jasmine, platforms);
+      this.physics.add.collider(jasmine, tile);
       stars = this.physics.add.group({
         key: "star",
         repeat: 8,
@@ -1595,6 +1607,7 @@ var LevelThreeScene = /*#__PURE__*/function (_Phaser$Scene) {
       stars.children.iterate(function (child) {
         child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.5));
       });
+      this.physics.add.collider(stars, platforms);
       scoreText = this.add.text(280, 10, "Your score: 210", {
         fontSize: "32px",
         fill: "#000"
@@ -1655,6 +1668,10 @@ var LevelThreeScene = /*#__PURE__*/function (_Phaser$Scene) {
 
       if (cursors.up.isDown && jasmine.body.touching.down) {
         jasmine.setVelocityY(-330);
+      }
+
+      if (cursors.down.isDown) {
+        console.log("BOMB");
       }
     }
   }]);
@@ -1923,7 +1940,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50841" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52397" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

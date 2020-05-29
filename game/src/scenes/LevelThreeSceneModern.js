@@ -37,6 +37,7 @@ export class LevelThreeSceneModern extends Phaser.Scene {
     preload() {}
     create() {
         this.add.image(0, 0, "mainbg").setOrigin(0).setDepth(0);
+
         moderngirl = this.physics.add.sprite(20, 300, "moderngirl", 0);
         moderngirl.setBounce(0.5);
         moderngirl.setCollideWorldBounds(true);

@@ -13,6 +13,9 @@ let ping;
 let sound;
 let cancelsound;
 
+let platforms;
+let tile;
+
 function collectStar(jasmine, star) {
     star.disableBody(true, true);
 
@@ -37,6 +40,16 @@ export class LevelThreeScene extends Phaser.Scene {
     preload() {}
     create() {
         this.add.image(0, 0, "mainbg").setOrigin(0).setDepth(0);
+
+        tile = this.physics.add.staticGroup();
+        tile.create(140, 510, "tile").refreshBody();
+        tile.create(300, 400, "tile");
+        tile.create(400, 200, "tile");
+
+        platforms = this.physics.add.staticGroup();
+
+        platforms.create(400, 600, "grass").setScale(2).refreshBody();
+        platforms.create(-100, 300, "grass");
 
         jasmine = this.physics.add.sprite(20, 300, "jasmine", 0);
         jasmine.setBounce(0.5);
@@ -70,6 +83,9 @@ export class LevelThreeScene extends Phaser.Scene {
 
         cursors = this.input.keyboard.createCursorKeys();
 
+        this.physics.add.collider(jasmine, platforms);
+        this.physics.add.collider(jasmine, tile);
+
         stars = this.physics.add.group({
             key: "star",
             repeat: 8,
@@ -79,6 +95,8 @@ export class LevelThreeScene extends Phaser.Scene {
         stars.children.iterate((child) => {
             child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.5));
         });
+
+        this.physics.add.collider(stars, platforms);
 
         scoreText = this.add.text(280, 10, "Your score: 210", {
             fontSize: "32px",
@@ -172,6 +190,10 @@ export class LevelThreeScene extends Phaser.Scene {
 
         if (cursors.up.isDown && jasmine.body.touching.down) {
             jasmine.setVelocityY(-330);
+        }
+
+        if (cursors.down.isDown) {
+            console.log("BOMB");
         }
     }
 }
