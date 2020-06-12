@@ -569,7 +569,7 @@ var LevelOneScene = /*#__PURE__*/function (_Phaser$Scene) {
         _this.sound.mute = true;
 
         if (_this.sound.mute = true) {
-          sound.on("pointerup", function () {
+          cancelsound.on("pointerup", function () {
             _this.sound.mute = false;
             cancelsound.visible = false;
           });
@@ -1940,7 +1940,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52397" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49473" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

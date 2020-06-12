@@ -137,7 +137,7 @@ export class LevelOneScene extends Phaser.Scene {
                 .setInteractive();
             this.sound.mute = true;
             if ((this.sound.mute = true)) {
-                sound.on("pointerup", () => {
+                cancelsound.on("pointerup", () => {
                     this.sound.mute = false;
                     cancelsound.visible = false;
                 });
